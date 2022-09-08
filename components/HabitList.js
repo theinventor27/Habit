@@ -4,7 +4,15 @@ import React, {useEffect} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Habits from './habits';
 
-const HabitList = ({theme, habits, setHabits, resetHabits, setResetHabits}) => {
+const HabitList = ({
+  habitTheme,
+  habits,
+  setHabits,
+  resetHabits,
+  setResetHabits,
+  textTheme,
+  bgTheme,
+}) => {
   const getHabit = async () => {
     try {
       const jsonValue = JSON.parse(await AsyncStorage.getItem('habitData'));
@@ -38,7 +46,6 @@ const HabitList = ({theme, habits, setHabits, resetHabits, setResetHabits}) => {
             setHabits={setHabits}
             resetHabits={resetHabits}
             setResetHabits={setResetHabits}
-            theme={theme}
             id={item.id}
             name={item.name}
             goalCount={item.goalCount}
@@ -47,6 +54,10 @@ const HabitList = ({theme, habits, setHabits, resetHabits, setResetHabits}) => {
             longestStreak={item.longestStreak}
             lastCompletedDate={item.lastCompletedDate}
             last7dCompletedData={item.last7dCompletedData}
+            //theme
+            habitTheme={habitTheme}
+            textTheme={textTheme}
+            bgTheme={bgTheme}
           />
         )}
       />

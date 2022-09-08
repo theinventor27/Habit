@@ -1,16 +1,16 @@
 import React, {useState} from 'react';
+import {Appearance} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
-
 //SCREENS IMPORT
 import Home from './screens/Home';
 import HabitDetails from './screens/HabitDetails';
 import Settings from './screens/Settings';
 
 const Stack = createStackNavigator();
+const colorScheme = Appearance.getColorScheme();
 
 const App = () => {
-
   return (
     <NavigationContainer>
       <Stack.Navigator>

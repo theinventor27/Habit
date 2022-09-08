@@ -101,8 +101,8 @@ const HabitDetails = ({route}) => {
             maxValue={goalCount}
             radius={80}
             inActiveStrokeColor={'black'}
-            activeStrokeColor={route.params.theme}
-            progressValueColor={route.params.theme}
+            activeStrokeColor={route.params.habitTheme}
+            progressValueColor={route.params.habitTheme}
             inActiveStrokeOpacity={0.2}
           />
         </View>

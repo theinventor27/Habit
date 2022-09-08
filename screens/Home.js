@@ -15,7 +15,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const App = () => {
   const navigation = useNavigation();
-  const [theme, setTheme] = useState('red');
   const [habits, setHabits] = useState(['']);
 
   //habits states
@@ -25,6 +24,13 @@ const App = () => {
 
   //Time States
   const [resetHabits, setResetHabits] = useState(false);
+
+  //Theme
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  const [habitTheme, setHabitTheme] = useState('red');
+  const [textTheme, setTextTheme] = useState('#fff');
+  const [bgTheme, setBgTheme] = useState('#000000');
 
   const checkTime = async () => {
     var date = new Date().getDate();
@@ -68,14 +74,20 @@ const App = () => {
   const ListHeader = () => (
     <>
       <View style={styles.titleWrapper}>
-        <Text style={styles.appTitle}>Habit Tracker</Text>
+        <Text style={[styles.appTitle, {color: textTheme}]}>Habit Tracker</Text>
         <TouchableOpacity
           onPress={() => {
             navigation.navigate('Settings', {
-              setTheme: setTheme,
-              theme: theme,
+              setHabitTheme: setHabitTheme,
+              habitTheme: habitTheme,
               habits: habits,
               setHabits: setHabits,
+              //themes
+              isDarkMode: isDarkMode,
+              textTheme: textTheme,
+              setTextTheme: setTextTheme,
+              bgTheme: bgTheme,
+              setBgTheme: setBgTheme,
             });
           }}>
           <Image
@@ -91,8 +103,16 @@ const App = () => {
   );
   const getTheme = async () => {
     try {
-      const themeColor = await AsyncStorage.getItem('theme');
-      setTheme(themeColor);
+      const habitThemeColor = await AsyncStorage.getItem('habitTheme');
+      setHabitTheme(habitThemeColor);
+    } catch (e) {
+      // error reading value
+      console.log(e);
+    }
+    try {
+      const darkMode = await AsyncStorage.getItem('darkMode');
+      setIsDarkMode(darkMode);
+      console.log('dark mode:', darkMode);
     } catch (e) {
       // error reading value
       console.log(e);
@@ -105,7 +125,7 @@ const App = () => {
 
   return (
     <GestureHandlerRootView style={{flex: 1}}>
-      <SafeAreaView style={styles.screen}>
+      <SafeAreaView style={[styles.screen, {backgroundColor: bgTheme}]}>
         <ListHeader />
         <HabitList
           habits={habits}
@@ -117,7 +137,10 @@ const App = () => {
           id={id}
           goalCount={goalCount}
           setGoalCount={setGoalCount}
-          theme={theme}
+          habitTheme={habitTheme}
+          //themes
+          textTheme={textTheme}
+          bgTheme={bgTheme}
         />
         <BottomSheet
           //Habit states
@@ -129,8 +152,10 @@ const App = () => {
           setName={setName}
           goalCount={goalCount}
           setGoalCount={setGoalCount}
-          //Other
-          theme={theme}
+          //Themes
+          habitTheme={habitTheme}
+          textTheme={textTheme}
+          bgTheme={bgTheme}
         />
       </SafeAreaView>
     </GestureHandlerRootView>

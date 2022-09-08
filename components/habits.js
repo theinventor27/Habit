@@ -20,7 +20,9 @@ const habits = ({
   currentStreak,
   longestStreak,
   last7dCompletedData,
-  theme,
+  habitTheme,
+  textTheme,
+  bgTheme,
 }) => {
   const navigation = useNavigation();
   const [thisCurrentCount, setThisCurrentCount] = useState(currentCount);
@@ -142,7 +144,7 @@ const habits = ({
   //Navigate to habit detail page
   const onPressHabitName = () => {
     navigation.navigate('HabitDetails', {
-      theme: theme,
+      habitTheme: habitTheme,
       habits: habits,
       setHabits: setHabits,
       name: name,
@@ -198,23 +200,25 @@ const habits = ({
   }, [resetHabits]);
 
   return (
-    <View style={styles.habitsContainer}>
-      <View style={styles.habit}>
+    <View style={[styles.habitsContainer, {backgroundColor: bgTheme}]}>
+      <View style={[styles.habit, {backgroundColor: bgTheme}]}>
         <TouchableOpacity onPress={() => onPressAdd()} style={styles.add}>
           <View style={styles.streakWrapper}>
             <Image
               style={styles.streakImage}
-              source={require('../Assets/streak.png')}
+              source={require('../Assets/streak_white.png')}
             />
-            <Text style={styles.currentStreakText}>{thisCurrentStreak}</Text>
+            <Text style={[styles.currentStreakText, {color: textTheme}]}>
+              {thisCurrentStreak}
+            </Text>
           </View>
           <CircularProgress
             value={thisCurrentCount}
             maxValue={goalCount}
             radius={70}
-            inActiveStrokeColor={'black'}
-            activeStrokeColor={theme}
-            progressValueColor={theme}
+            inActiveStrokeColor={'#fff'}
+            activeStrokeColor={habitTheme}
+            progressValueColor={habitTheme}
             inActiveStrokeOpacity={0.2}
           />
         </TouchableOpacity>
@@ -223,7 +227,7 @@ const habits = ({
           style={styles.pressHabitName}
           onPress={onPressHabitName}>
           <View style={styles.habitText}>
-            <Text style={styles.habitName}>{name}</Text>
+            <Text style={[styles.habitName, {color: textTheme}]}>{name}</Text>
           </View>
         </TouchableOpacity>
       </View>

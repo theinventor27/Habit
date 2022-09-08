@@ -5,19 +5,45 @@ import {
   SafeAreaView,
   TouchableOpacity,
   FlatList,
+  Switch,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 //Progress Bar Componenets
 import CircularProgress from 'react-native-circular-progress-indicator';
 
 const Settings = ({route}) => {
-  const [exampleColor, setExampleColor] = useState(route.params.theme);
+  const [exampleColor, setExampleColor] = useState(route.params.habitTheme);
   const [randomValue, setRandomValue] = useState(5);
+  const [textTheme, setTextTheme] = useState(route.params.textTheme);
+  const [bgTheme, setBgTheme] = useState(route.params.bgTheme);
+  //Switch states
+  const [isEnabled, setIsEnabled] = useState(false);
+  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+
+  const setDarkMode = async () => {
+    if (isEnabled) {
+      route.params.setBgTheme('#000000');
+      setBgTheme('#000000');
+      route.params.setTextTheme('#fff');
+      setTextTheme('#fff');
+    } else {
+      route.params.setBgTheme('#fff');
+      setBgTheme('#fff');
+      route.params.setTextTheme('#000000');
+      setTextTheme('#000000');
+    }
+    try {
+      await AsyncStorage.setItem('darkMode', isEnabled.toString());
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const ListHeader = () => (
     <>
       <View style={styles.titleWrapper}>
-        <Text style={styles.appTitle}>Settings</Text>
+        <Text style={[styles.appTitle, {color: textTheme}]}>Settings</Text>
       </View>
       <View style={styles.divider} />
     </>
@@ -31,7 +57,7 @@ const Settings = ({route}) => {
     console.log(colorData);
 
     //uses route to set theme globally
-    route.params.setTheme(color);
+    route.params.setHabitTheme(color);
 
     //sets example progress bar color
     setExampleColor(color);
@@ -57,11 +83,12 @@ const Settings = ({route}) => {
   ];
   const saveColor = async color => {
     try {
-      await AsyncStorage.setItem('theme', color);
+      await AsyncStorage.setItem('habitTheme', color);
     } catch (error) {
       console.log(error);
     }
   };
+
   const ColorView = ({colorData}) => (
     <>
       <View style={styles.colorPicker}>
@@ -87,26 +114,48 @@ const Settings = ({route}) => {
       />
     </>
   );
+  useEffect(() => {
+    setDarkMode();
+  }, [isEnabled]);
 
   return (
-    <SafeAreaView style={styles.screen}>
+    <SafeAreaView style={[styles.screen, {backgroundColor: bgTheme}]}>
       <View style={styles.screen}>
         <ListHeader />
-        <Text style={styles.themeText}>Choose Theme:</Text>
+
+        <View style={styles.darkModeWrapper}>
+          <Text style={[styles.darkModeText, {color: textTheme}]}>
+            Dark Mode:
+          </Text>
+
+          <Switch
+            trackColor={{false: '#fff', true: '#333'}}
+            thumbColor={isEnabled ? '#f4f3f4' : '#f4f3f4'}
+            ios_backgroundColor="#a3a3a3"
+            onValueChange={() => {
+              toggleSwitch();
+            }}
+            value={isEnabled}
+          />
+        </View>
+        <Text style={[styles.themeText, {color: textTheme}]}>
+          Choose Theme:
+        </Text>
         <View style={styles.circularProgressExample}>
           <CircularProgress
             value={randomValue}
             maxValue={10}
             radius={70}
-            inActiveStrokeColor={'black'}
+            inActiveStrokeColor={'#fff'}
             activeStrokeColor={exampleColor}
             progressValueColor={exampleColor}
             inActiveStrokeOpacity={0.2}
           />
         </View>
         <FlatListWithColors />
+
         <TouchableOpacity onPress={() => deleteAllHabits()}>
-          <Text>DELETE ALL HABITS</Text>
+          <Text style={[styles.deleteAllHabits]}>DELETE ALL HABITS</Text>
         </TouchableOpacity>
       </View>
       <Text style={styles.signiture}>Johan</Text>
@@ -134,27 +183,14 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
     marginTop: 16,
   },
-  inputNameWrapper: {
-    justifyContent: 'flex-start',
-    alignItems: 'center',
+  darkModeWrapper: {
     flexDirection: 'row',
-    marginLeft: 10,
-  },
-  inputNameText: {
-    alignSelf: 'center',
-    justifyContent: 'center',
-    fontSize: 15,
-  },
-  nameInput: {
-    height: 40,
-    width: 200,
+    alignItems: 'center',
     marginLeft: 10,
     marginTop: 25,
-    backgroundColor: 'white',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderColor: 'black',
-    borderWidth: 1,
+  },
+  darkModeText: {
+    marginRight: 15,
   },
   themeText: {
     fontSize: 15,
@@ -186,5 +222,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     textAlign: 'center',
     height: 12,
+  },
+  deleteAllHabits: {
+    textAlign: 'center',
+    color: 'red',
   },
 });

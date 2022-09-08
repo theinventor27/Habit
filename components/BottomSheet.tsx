@@ -9,7 +9,6 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const BottomSheet = ({
-  theme,
   habits,
   setHabits,
   name,
@@ -18,6 +17,10 @@ const BottomSheet = ({
   setId,
   goalCount,
   setGoalCount,
+  //themes
+  habitTheme,
+  textTheme,
+  bgTheme,
 }) => {
   // ref
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
@@ -83,9 +86,9 @@ const BottomSheet = ({
   return (
     <BottomSheetModalProvider>
       <TouchableOpacity
-        style={styles.addHabitButton}
+        style={[styles.addHabitButton, {backgroundColor: bgTheme}]}
         onPress={handlePresentModalPress}>
-        <Text style={styles.addHabitText}>+</Text>
+        <Text style={[styles.addHabitText, {color: textTheme}]}>+</Text>
       </TouchableOpacity>
       <BottomSheetModal
         ref={bottomSheetModalRef}
@@ -95,33 +98,38 @@ const BottomSheet = ({
         style={styles.bottomSheet}>
         <View
           style={{
-            backgroundColor: theme,
+            backgroundColor: bgTheme,
             flex: 1,
             paddingTop: 25,
-            borderTopColor: 'black',
-            borderTopWidth: 1,
+            borderTopColor: bgTheme,
           }}>
-          <Text style={styles.title}>Add a Habit:</Text>
+          <Text style={[styles.title, {color: textTheme}]}>Add a Habit:</Text>
 
           <View style={styles.form}>
             <BottomSheetTextInput
               style={styles.textInput}
               placeholder="Name"
-              placeholderTextColor={'gray'}
+              placeholderTextColor={textTheme}
               value={name}
               onChangeText={text => setName(text)}
             />
             <BottomSheetTextInput
-              style={styles.textInput}
+              style={[styles.textInput]}
               keyboardType={'numeric'}
               placeholder="How many times a day?"
-              placeholderTextColor={'gray'}
+              placeholderTextColor={textTheme}
               onChangeText={text => setGoalCount(text)}
             />
             <TouchableOpacity
               style={styles.submitHabit}
               onPress={() => saveHabit()}>
-              <Text style={styles.submitHabitText}>Add</Text>
+              <Text
+                style={[
+                  styles.submitHabitText,
+                  {color: textTheme, borderColor: textTheme},
+                ]}>
+                Add
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -158,7 +166,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     shadowColor: 'gray',
-    shadowOpacity: 1,
+    shadowOpacity: 0.6,
     alignSelf: 'flex-end',
     position: 'absolute',
     bottom: 30,
@@ -174,7 +182,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: 'center',
     marginBottom: 5,
-    color: 'white',
   },
   textInput: {
     marginHorizontal: 70,
@@ -184,7 +191,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'black',
     marginBottom: 20,
-    backgroundColor: 'white',
+    backgroundColor: '#333',
   },
   submitHabit: {
     paddingHorizontal: 25,
@@ -193,11 +200,8 @@ const styles = StyleSheet.create({
     marginTop: 15,
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: 'white',
 
     alignSelf: 'center',
   },
-  submitHabitText: {
-    color: 'white',
-  },
+  submitHabitText: {},
 });
