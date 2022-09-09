@@ -38,7 +38,7 @@ const HabitDetails = ({route}) => {
 
       setCurrentCount(currentCount + 1);
       route.params.setThisCurrentCount(currentCount + 1);
-      let x = currentCount + 1;
+      var x = currentCount + 1;
       thisHabit['currentCount'] = x;
       thisHabit['last7dCompletedData'][
         route.params.last7dCompletedData.length - 1
@@ -47,8 +47,80 @@ const HabitDetails = ({route}) => {
       console.log(currentCount);
       saveHabit();
     }
+    if (goalCount == x) {
+      // console.log('habit', name, 'completed.');
+      habitCompleted();
+    }
   };
+  const habitCompleted = () => {
+    //create copy of habits
+    let habitsCopy = route.params.habits;
+    //find this habit obj. within the new copy of habits
+    let thisHabit = habitsCopy.find(obj => obj.id === route.params.id);
 
+    //If currentStreak is 0 then we do not check if it was completed yesterday.
+    if (thisHabit['currentStreak'] == 0) {
+      //Set streaks to 1.
+      thisHabit['currentStreak'] = 1;
+      route.params.setThisCurrentStreak(1);
+      //check if longestStreak is 0 if so, set to 1.
+      if (route.params.longestStreak == 0) {
+        thisHabit['longestStreak'] = 1;
+        route.params.setThisLongestStreak(1);
+      }
+
+      //set date to check if completed in a streak.
+      thisHabit['lastCompletedDate'] = getCurrentDate();
+      console.log(thisHabit['lastCompletedDate']);
+      //set copy as official habit
+      route.params.setHabits(habitsCopy);
+      saveHabit();
+    }
+    if (thisHabit['currentStreak'] > 0) {
+      //create copy of habits
+      let habitsCopy = route.params.habits;
+      //find this habit obj. within the new copy of habits
+      let thisHabit = habitsCopy.find(obj => obj.id === route.params.id);
+
+      //Get last completed date and todays date and split them into an array to compare
+      //each elements of the array. All elements should be the same except for the day.
+      //The day should be 1 more than the last completed day.
+      let lastCompletedDate = thisHabit['lastCompletedDate'];
+      todaysDate = getCurrentDate();
+      lastCompletedDate = lastCompletedDate.split('-');
+      todaysDate = todaysDate.split('-');
+
+      if (
+        //check month
+        lastCompletedDate[0] == todaysDate[0] &&
+        //check year
+        lastCompletedDate[2] == todaysDate[2]
+      ) {
+        //check if it was completed the day before
+        if (lastCompletedDate[1] == todaysDate[1] - 1) {
+          //increase string by 1.
+          let x = thisHabit['currentStreak'] + 1;
+          thisHabit['currentStreak'] = x;
+          //check if currentStreak is longer than longestStreak
+          if (x > route.params.longestStreak) {
+            route.params.setThisLongestStreak(x);
+            thisHabit['longestStreak'] = x;
+          }
+          route.params.setThisCurrentStreak(x);
+          //set date to check if completed in a streak.
+          thisHabit['lastCompletedDate'] = getCurrentDate();
+          //set copy as official habit
+
+          route.params.setHabits(habitsCopy);
+          saveHabit();
+        } else {
+          route.params.setThisCurrentStreak(1);
+        }
+      } else {
+        route.params.setThisCurrentStreak(1);
+      }
+    }
+  };
   //Decreases the count of the habit if count is not equal to 0.
   const decreaseCount = () => {
     if (currentCount != 0) {
@@ -81,18 +153,31 @@ const HabitDetails = ({route}) => {
   const onPressSubtract = () => {
     decreaseCount();
   };
+  //returns current date formatted d-m-yyyy
+  const getCurrentDate = () => {
+    var date = new Date().getDate();
+    var month = new Date().getMonth() + 1;
+    var year = new Date().getFullYear();
+
+    // console.log(month + '-' + date + '-' + year);
+    // You can turn it in to your desired format
+    return month + '-' + date + '-' + year; //format: d-m-y;
+  };
 
   const ListHeader = () => (
     <>
       <View style={styles.titleWrapper}>
-        <Text style={styles.appTitle}>{route.params.name}</Text>
+        <Text style={[styles.appTitle, {color: route.params.textTheme}]}>
+          {route.params.name}
+        </Text>
       </View>
       <View style={styles.divider} />
     </>
   );
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView
+      style={[styles.container, {backgroundColor: route.params.bgTheme}]}>
       <ListHeader />
       <View style={styles.habitCountWrapper}>
         <View style={styles.circularProgressExample}>
@@ -100,7 +185,7 @@ const HabitDetails = ({route}) => {
             value={currentCount}
             maxValue={goalCount}
             radius={80}
-            inActiveStrokeColor={'black'}
+            inActiveStrokeColor={route.params.textTheme}
             activeStrokeColor={route.params.habitTheme}
             progressValueColor={route.params.habitTheme}
             inActiveStrokeOpacity={0.2}
@@ -127,12 +212,18 @@ const HabitDetails = ({route}) => {
         last7dCompletedData={route.params.last7dCompletedData}
         currentStreak={route.params.currentStreak}
         longestStreak={route.params.longestStreak}
+        //theme
+        bgtheme={route.params.bgTheme}
+        textTheme={route.params.textTheme}
       />
       <View style={styles.componenetDivider} />
 
       <LineChart7d
         theme={route.params.habitTheme}
         last7dCompletedData={route.params.last7dCompletedData}
+        //theme
+        bgtheme={route.params.bgTheme}
+        textTheme={route.params.textTheme}
       />
       <View style={styles.push} />
       <View style={styles.deleteWrapper}>

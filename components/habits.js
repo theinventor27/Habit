@@ -56,7 +56,7 @@ const habits = ({
       saveHabit();
     }
     if (goalCount == x) {
-      console.log('habit', name, 'completed.');
+      // console.log('habit', name, 'completed.');
       habitCompleted();
     }
   };
@@ -155,6 +155,12 @@ const habits = ({
       last7dCompletedData: last7dCompletedData,
       currentStreak: thisCurrentStreak,
       longestStreak: thisLongestStreak,
+      setThisLongestStreak: setThisLongestStreak,
+      setThisCurrentStreak: setThisCurrentStreak,
+
+      //theme
+      bgTheme: bgTheme,
+      textTheme: textTheme,
     });
   };
 

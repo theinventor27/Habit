@@ -2,7 +2,7 @@ import {StyleSheet, Text, View, Dimensions} from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {LineChart} from 'react-native-chart-kit';
 
-const LineChart7d = ({theme, last7dCompletedData}) => {
+const LineChart7d = ({theme, last7dCompletedData, textTheme, bgTheme}) => {
   const [last7Days, setLast7Days] = useState([]);
 
   const returnLast7Days = () => {
@@ -25,7 +25,9 @@ const LineChart7d = ({theme, last7dCompletedData}) => {
 
   return (
     <View style={styles.chartWrapper}>
-      <Text style={styles.chartTitle}>7D Habit Chart</Text>
+      <Text style={[styles.chartTitle, {color: textTheme}]}>
+        7D Habit Chart
+      </Text>
       <LineChart
         data={{
           labels: last7Days,
@@ -46,8 +48,8 @@ const LineChart7d = ({theme, last7dCompletedData}) => {
           backgroundGradientFrom: '#0000ffff',
           backgroundGradientTo: '#0000ffff',
           decimalPlaces: 2, // optional, defaults to 2dp
-          color: (opacity = 1) => `rgba(2, 2, 2, ${opacity})`,
-          labelColor: (opacity = 1) => `rgba(2, 2, 2, ${opacity})`,
+          color: (opacity = 0.3) => textTheme,
+          labelColor: (opacity = 0.2) => textTheme,
           style: {
             borderRadius: 16,
           },

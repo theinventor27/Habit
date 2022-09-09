@@ -6,6 +6,9 @@ const HabitStats = ({
   currentStreak,
   longestStreak,
   goalCount,
+  //theme
+  bgtheme,
+  textTheme,
 }) => {
   const calculate7dCompletion = () => {
     console.log(currentStreak, 'current streak');
@@ -25,19 +28,31 @@ const HabitStats = ({
 
   return (
     <View>
-      <Text style={styles.title}>Statistics:</Text>
+      <Text style={[styles.title, {color: textTheme}]}>Statistics:</Text>
       <View style={styles.statsWrapper}>
         <View style={styles.statsDisplay}>
-          <Text style={styles.statsNum}>{calculate7dCompletion()}%</Text>
-          <Text style={styles.statsCategory}>7d Completition</Text>
+          <Text style={[styles.statsNum, {color: textTheme}]}>
+            {calculate7dCompletion()}%
+          </Text>
+          <Text style={[styles.statsCategory, {color: textTheme}]}>
+            7d Completition
+          </Text>
         </View>
         <View style={styles.statsDisplay}>
-          <Text style={styles.statsNum}>{currentStreak}</Text>
-          <Text style={styles.statsCategory}>Current Streak</Text>
+          <Text style={[styles.statsNum, {color: textTheme}]}>
+            {currentStreak}
+          </Text>
+          <Text style={[styles.statsCategory, {color: textTheme}]}>
+            Current Streak
+          </Text>
         </View>
         <View style={styles.statsDisplay}>
-          <Text style={styles.statsNum}>{longestStreak}</Text>
-          <Text style={styles.statsCategory}>Longest Streak</Text>
+          <Text style={[styles.statsNum, {color: textTheme}]}>
+            {longestStreak}
+          </Text>
+          <Text style={[styles.statsCategory, {color: textTheme}]}>
+            Longest Streak
+          </Text>
         </View>
       </View>
     </View>

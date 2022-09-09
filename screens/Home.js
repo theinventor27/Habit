@@ -197,7 +197,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#A9ABB1',
     marginHorizontal: 16,
     marginTop: 16,
-    marginBottom: 10,
   },
 
   settingsIcon: {

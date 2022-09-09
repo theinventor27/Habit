@@ -68,5 +68,7 @@ const HabitList = ({
 export default HabitList;
 
 const styles = StyleSheet.create({
-  habitContainer: {},
+  habitContainer: {
+    flex: 1,
+  },
 });
