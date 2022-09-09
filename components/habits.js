@@ -204,10 +204,19 @@ const habits = ({
       <View style={[styles.habit, {backgroundColor: bgTheme}]}>
         <TouchableOpacity onPress={() => onPressAdd()} style={styles.add}>
           <View style={styles.streakWrapper}>
-            <Image
-              style={styles.streakImage}
-              source={require('../Assets/streak_white.png')}
-            />
+            {/* if bgTheme is black, set white streak img */}
+            {bgTheme == '#333' ? (
+              <Image
+                style={styles.streakImage}
+                source={require('../Assets/streak_white.png')}
+              />
+            ) : (
+              // else set black img
+              <Image
+                style={styles.streakImage}
+                source={require('../Assets/streak_black.png')}
+              />
+            )}
             <Text style={[styles.currentStreakText, {color: textTheme}]}>
               {thisCurrentStreak}
             </Text>
@@ -216,7 +225,7 @@ const habits = ({
             value={thisCurrentCount}
             maxValue={goalCount}
             radius={70}
-            inActiveStrokeColor={'#fff'}
+            inActiveStrokeColor={textTheme}
             activeStrokeColor={habitTheme}
             progressValueColor={habitTheme}
             inActiveStrokeOpacity={0.2}

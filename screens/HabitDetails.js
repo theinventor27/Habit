@@ -131,7 +131,7 @@ const HabitDetails = ({route}) => {
       <View style={styles.componenetDivider} />
 
       <LineChart7d
-        theme={route.params.theme}
+        theme={route.params.habitTheme}
         last7dCompletedData={route.params.last7dCompletedData}
       />
       <View style={styles.push} />

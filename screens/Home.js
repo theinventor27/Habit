@@ -30,7 +30,7 @@ const App = () => {
 
   const [habitTheme, setHabitTheme] = useState('red');
   const [textTheme, setTextTheme] = useState('#fff');
-  const [bgTheme, setBgTheme] = useState('#000000');
+  const [bgTheme, setBgTheme] = useState('#333');
 
   const checkTime = async () => {
     var date = new Date().getDate();
@@ -90,12 +90,18 @@ const App = () => {
               setBgTheme: setBgTheme,
             });
           }}>
-          <Image
-            style={styles.settingsIcon}
-            source={{
-              uri: 'https://icons.iconarchive.com/icons/icons8/ios7/512/Very-Basic-Settings-icon.png',
-            }}
-          />
+          {bgTheme == '#333' ? (
+            <Image
+              style={styles.settingsIcon}
+              source={require('../Assets/settings_white.png')}
+            />
+          ) : (
+            // else set black img
+            <Image
+              style={styles.settingsIcon}
+              source={require('../Assets/settings_black.png')}
+            />
+          )}
         </TouchableOpacity>
       </View>
       <View style={styles.divider} />
@@ -110,14 +116,23 @@ const App = () => {
       console.log(e);
     }
     try {
-      const darkMode = await AsyncStorage.getItem('darkMode');
-      setIsDarkMode(darkMode);
-      console.log('dark mode:', darkMode);
+      const scheme = await AsyncStorage.getItem('Scheme');
+      if (scheme == 'dark') {
+        setTextTheme('#fff');
+        setBgTheme('#333');
+        console.log('theme is dark');
+      }
+      if (scheme == 'light') {
+        setTextTheme('#000000');
+        setBgTheme('#fff');
+        console.log('theme is light');
+      }
     } catch (e) {
       // error reading value
       console.log(e);
     }
   };
+
   useEffect(() => {
     checkTime();
     getTheme();

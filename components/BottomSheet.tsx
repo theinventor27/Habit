@@ -86,7 +86,10 @@ const BottomSheet = ({
   return (
     <BottomSheetModalProvider>
       <TouchableOpacity
-        style={[styles.addHabitButton, {backgroundColor: bgTheme}]}
+        style={[
+          styles.addHabitButton,
+          {backgroundColor: bgTheme, borderColor: textTheme},
+        ]}
         onPress={handlePresentModalPress}>
         <Text style={[styles.addHabitText, {color: textTheme}]}>+</Text>
       </TouchableOpacity>
@@ -166,7 +169,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     shadowColor: 'gray',
-    shadowOpacity: 0.6,
+    shadowOpacity: 1,
     alignSelf: 'flex-end',
     position: 'absolute',
     bottom: 30,

@@ -18,23 +18,29 @@ const Settings = ({route}) => {
   const [textTheme, setTextTheme] = useState(route.params.textTheme);
   const [bgTheme, setBgTheme] = useState(route.params.bgTheme);
   //Switch states
-  const [isEnabled, setIsEnabled] = useState(false);
-  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+  const [isEnabled, setIsEnabled] = useState();
+  const toggleSwitch = async () => {
+    var scheme = '';
+    setIsEnabled(previousState => !previousState);
 
-  const setDarkMode = async () => {
     if (isEnabled) {
-      route.params.setBgTheme('#000000');
-      setBgTheme('#000000');
+      scheme = 'dark';
+      route.params.setBgTheme('#333');
+      setBgTheme('#333');
       route.params.setTextTheme('#fff');
       setTextTheme('#fff');
+      console.log(isEnabled);
     } else {
+      scheme = 'light';
       route.params.setBgTheme('#fff');
       setBgTheme('#fff');
       route.params.setTextTheme('#000000');
       setTextTheme('#000000');
+      console.log(isEnabled);
     }
+    //save either 'dark' or 'light' as scheme in asyncstorage
     try {
-      await AsyncStorage.setItem('darkMode', isEnabled.toString());
+      await AsyncStorage.setItem('Scheme', scheme);
     } catch (error) {
       console.log(error);
     }
@@ -114,9 +120,6 @@ const Settings = ({route}) => {
       />
     </>
   );
-  useEffect(() => {
-    setDarkMode();
-  }, [isEnabled]);
 
   return (
     <SafeAreaView style={[styles.screen, {backgroundColor: bgTheme}]}>
@@ -129,13 +132,11 @@ const Settings = ({route}) => {
           </Text>
 
           <Switch
-            trackColor={{false: '#fff', true: '#333'}}
+            trackColor={{false: '#fff', true: '#000000'}}
             thumbColor={isEnabled ? '#f4f3f4' : '#f4f3f4'}
             ios_backgroundColor="#a3a3a3"
-            onValueChange={() => {
-              toggleSwitch();
-            }}
-            value={isEnabled}
+            onValueChange={() => toggleSwitch()}
+            value={!isEnabled}
           />
         </View>
         <Text style={[styles.themeText, {color: textTheme}]}>
@@ -146,7 +147,7 @@ const Settings = ({route}) => {
             value={randomValue}
             maxValue={10}
             radius={70}
-            inActiveStrokeColor={'#fff'}
+            inActiveStrokeColor={textTheme}
             activeStrokeColor={exampleColor}
             progressValueColor={exampleColor}
             inActiveStrokeOpacity={0.2}
@@ -221,7 +222,7 @@ const styles = StyleSheet.create({
     fontFamily: 'AppleSDGothicNeo-Thin',
     justifyContent: 'center',
     textAlign: 'center',
-    height: 12,
+    height: 9,
   },
   deleteAllHabits: {
     textAlign: 'center',
