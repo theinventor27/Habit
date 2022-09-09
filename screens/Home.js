@@ -90,7 +90,7 @@ const App = () => {
               setBgTheme: setBgTheme,
             });
           }}>
-          {bgTheme == '#333' ? (
+          {bgTheme == '#222324' ? (
             <Image
               style={styles.settingsIcon}
               source={require('../Assets/settings_white.png')}
@@ -119,7 +119,7 @@ const App = () => {
       const scheme = await AsyncStorage.getItem('Scheme');
       if (scheme == 'dark') {
         setTextTheme('#fff');
-        setBgTheme('#333');
+        setBgTheme('#222324');
         console.log('theme is dark');
       }
       if (scheme == 'light') {

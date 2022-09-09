@@ -205,7 +205,7 @@ const habits = ({
         <TouchableOpacity onPress={() => onPressAdd()} style={styles.add}>
           <View style={styles.streakWrapper}>
             {/* if bgTheme is black, set white streak img */}
-            {bgTheme == '#333' ? (
+            {bgTheme == '#222324' ? (
               <Image
                 style={styles.streakImage}
                 source={require('../Assets/streak_white.png')}

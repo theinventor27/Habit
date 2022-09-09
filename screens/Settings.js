@@ -25,8 +25,8 @@ const Settings = ({route}) => {
 
     if (isEnabled) {
       scheme = 'dark';
-      route.params.setBgTheme('#333');
-      setBgTheme('#333');
+      route.params.setBgTheme('#222324');
+      setBgTheme('#222324');
       route.params.setTextTheme('#fff');
       setTextTheme('#fff');
       console.log(isEnabled);
