@@ -262,11 +262,9 @@ const styles = StyleSheet.create({
   habitCountWrapper: {
     flexDirection: 'row',
     marginTop: 30,
+    justifyContent: 'center',
   },
-  amount: {
-    fontSize: 125,
-    marginLeft: 10,
-  },
+
   arrowImg: {
     height: 35,
     width: 55,
@@ -283,9 +281,7 @@ const styles = StyleSheet.create({
   downArrow: {
     transform: [{rotate: '180deg'}],
   },
-  circularProgressExample: {
-    marginLeft: 10,
-  },
+  circularProgressExample: {},
 
   push: {
     flex: 1,
