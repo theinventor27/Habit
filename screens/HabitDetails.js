@@ -170,17 +170,16 @@ const HabitDetails = ({route}) => {
   const deleteThisHabit = () => {
     let habitsCopy = route.params.habits;
     //find this habit obj. within the new copy of habits
-    console.log(habitsCopy);
-    let thisHabit = habitsCopy.find(obj => obj.id === route.params.id);
-    let poppedHabits = habitsCopy.pop(thisHabit);
-    console.log(poppedHabits);
+    let thisHabitIndex = habitsCopy.findIndex(
+      obj => obj.id === route.params.id,
+    );
+    let newHabits = habitsCopy.splice(thisHabitIndex, 1);
+    console.log(thisHabitIndex, '------');
 
-    route.params.setHabits(poppedHabits);
+    route.params.setHabits(newHabits);
 
     saveHabit();
     navigation.navigate('Home');
-    console.log('------------');
-    console.log(route.params.habits);
   };
 
   const ListHeader = () => (

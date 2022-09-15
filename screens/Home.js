@@ -12,12 +12,15 @@ import BottomSheet from '../components/BottomSheet';
 import {useNavigation} from '@react-navigation/native';
 import HabitList from '../components/HabitList';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useIsFocused} from '@react-navigation/native';
 
 const App = () => {
   const navigation = useNavigation();
-  const [habits, setHabits] = useState(['']);
+  const isFocused = useIsFocused();
 
   //habits states
+  const [habits, setHabits] = useState(['']);
+
   const [name, setName] = useState('');
   const [goalCount, setGoalCount] = useState('');
   const [id, setId] = useState('');
@@ -31,12 +34,12 @@ const App = () => {
   const [habitTheme, setHabitTheme] = useState('red');
   const [textTheme, setTextTheme] = useState('#fff');
   const [bgTheme, setBgTheme] = useState('#333');
-  
+
   const getHabit = async () => {
     try {
       const jsonValue = JSON.parse(await AsyncStorage.getItem('habitData'));
       setHabits(jsonValue);
-      console.log('Habit list component retrieved:', jsonValue);
+      console.log('getHabit() from home has run', jsonValue);
     } catch (e) {
       // error reading value
       console.log(e);
@@ -146,7 +149,8 @@ const App = () => {
   useEffect(() => {
     checkTime();
     getTheme();
-  }, [resetHabits, habits]);
+    getHabit();
+  }, [resetHabits, isFocused]);
 
   return (
     <GestureHandlerRootView style={{flex: 1}}>
