@@ -11,11 +11,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import CircularProgress from 'react-native-circular-progress-indicator';
 import LineChart7d from '../components/HabitDetails/LineChart7d';
 import HabitStats from '../components/HabitDetails/HabitStats';
+import {useNavigation} from '@react-navigation/native';
+
 const HabitDetails = ({route}) => {
   const [currentCount, setCurrentCount] = useState(
     route.params.thisCurrentCount,
   );
   const [goalCount, setGoalCount] = useState(route.params.goalCount);
+  const navigation = useNavigation();
 
   const saveHabit = async () => {
     try {
@@ -164,6 +167,22 @@ const HabitDetails = ({route}) => {
     return month + '-' + date + '-' + year; //format: d-m-y;
   };
 
+  const deleteThisHabit = () => {
+    let habitsCopy = route.params.habits;
+    //find this habit obj. within the new copy of habits
+    console.log(habitsCopy);
+    let thisHabit = habitsCopy.find(obj => obj.id === route.params.id);
+    let poppedHabits = habitsCopy.pop(thisHabit);
+    console.log(poppedHabits);
+
+    route.params.setHabits(poppedHabits);
+
+    saveHabit();
+    navigation.navigate('Home');
+    console.log('------------');
+    console.log(route.params.habits);
+  };
+
   const ListHeader = () => (
     <>
       <View style={styles.titleWrapper}>
@@ -227,7 +246,7 @@ const HabitDetails = ({route}) => {
       />
       <View style={styles.push} />
       <View style={styles.deleteWrapper}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => deleteThisHabit()}>
           <Text style={styles.deleteText}>DELETE</Text>
         </TouchableOpacity>
       </View>

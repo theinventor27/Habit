@@ -31,7 +31,17 @@ const App = () => {
   const [habitTheme, setHabitTheme] = useState('red');
   const [textTheme, setTextTheme] = useState('#fff');
   const [bgTheme, setBgTheme] = useState('#333');
-
+  
+  const getHabit = async () => {
+    try {
+      const jsonValue = JSON.parse(await AsyncStorage.getItem('habitData'));
+      setHabits(jsonValue);
+      console.log('Habit list component retrieved:', jsonValue);
+    } catch (e) {
+      // error reading value
+      console.log(e);
+    }
+  };
   const checkTime = async () => {
     var date = new Date().getDate();
     var month = new Date().getMonth() + 1;
@@ -136,7 +146,7 @@ const App = () => {
   useEffect(() => {
     checkTime();
     getTheme();
-  }, [resetHabits]);
+  }, [resetHabits, habits]);
 
   return (
     <GestureHandlerRootView style={{flex: 1}}>
