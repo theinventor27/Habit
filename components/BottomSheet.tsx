@@ -26,7 +26,7 @@ const BottomSheet = ({
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
 
   // variables
-  const snapPoints = useMemo(() => ['15%', '40'], []);
+  const snapPoints = useMemo(() => ['38', '38'], []);
 
   // callbacks
   const handlePresentModalPress = useCallback(() => {
@@ -96,41 +96,38 @@ const BottomSheet = ({
       <BottomSheetModal
         ref={bottomSheetModalRef}
         index={1}
+        enablePanDownToClose
         snapPoints={snapPoints}
         onChange={handleSheetChanges}
-        style={styles.bottomSheet}>
+        style={styles.bottomSheet}
+        backgroundStyle={{backgroundColor: habitTheme}}>
         <View
           style={{
-            backgroundColor: bgTheme,
+            backgroundColor: habitTheme,
             flex: 1,
             paddingTop: 25,
-            borderTopColor: bgTheme,
           }}>
-          <Text style={[styles.title, {color: textTheme}]}>Add a Habit:</Text>
+          <Text style={[styles.title, {color: bgTheme}]}>Add a Habit:</Text>
 
           <View style={styles.form}>
             <BottomSheetTextInput
-              style={styles.textInput}
+              style={[styles.textInput, {backgroundColor: bgTheme}]}
               placeholder="Name"
               placeholderTextColor={textTheme}
               value={name}
               onChangeText={text => setName(text)}
             />
             <BottomSheetTextInput
-              style={[styles.textInput]}
+              style={[styles.textInput, {backgroundColor: bgTheme}]}
               keyboardType={'numeric'}
               placeholder="How many times a day?"
               placeholderTextColor={textTheme}
               onChangeText={text => setGoalCount(text)}
             />
             <TouchableOpacity
-              style={styles.submitHabit}
+              style={[styles.submitHabit, {borderColor: bgTheme}]}
               onPress={() => saveHabit()}>
-              <Text
-                style={[
-                  styles.submitHabitText,
-                  {color: textTheme, borderColor: textTheme},
-                ]}>
+              <Text style={[styles.submitHabitText, {color: bgTheme}]}>
                 Add
               </Text>
             </TouchableOpacity>
@@ -150,14 +147,13 @@ const styles = StyleSheet.create({
     shadowColor: 'black',
     shadowOffset: {
       width: 0,
-      height: 10,
+      height: -40,
     },
     shadowOpacity: 1,
     shadowRadius: 100,
 
     elevation: 20,
   },
-  contentContainer: {},
 
   addHabitButton: {
     backgroundColor: 'white',
@@ -185,6 +181,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: 'center',
     marginBottom: 5,
+    marginTop: -15,
   },
   textInput: {
     marginHorizontal: 70,

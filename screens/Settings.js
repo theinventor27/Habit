@@ -57,7 +57,7 @@ const Settings = ({route}) => {
 
   const deleteAllHabits = async () => {
     console.log('All habits have been deleted');
-    route.params.setHabits([]);
+    route.params.setHabits(['']);
   };
   const onClickColor = color => {
     console.log(colorData);
