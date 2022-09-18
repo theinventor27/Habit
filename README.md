@@ -1,8 +1,13 @@
 # Habit!
 <img src="https://user-images.githubusercontent.com/79227874/190932259-e8b225b9-01af-475f-9f9b-f2c470c6113c.png" width="292.5" height="633">
-<img src="https://imgur.com/rGdIWCy" width="292.5" height="633">
+
+<img src=https://user-images.githubusercontent.com/79227874/190933102-c942e21c-7d9b-421e-bea4-3a165263c021.png width="292.5" height="633">
+
+
 About The Project
--------------------
+
+-----------------------------------
+
 Habit is a sleek habit tracker app. 
 
 You can easily track all of your habits and see your progress for each habit displayed in a circular progress bar. This allows you to quickly manage your habits. Furthermore, our UI allows you to easily keep track of how often you are completing each habit. The number next to the flame icon displays your current completion streak. For example, if you have completed the habit for the last 10 days, the number 10 will display next to the flame icon.
