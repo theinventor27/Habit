@@ -55,9 +55,23 @@ const Settings = ({route}) => {
     </>
   );
 
+  //Save habit to local storage
+  const saveHabit = async habits => {
+    try {
+      const jsonValue = JSON.stringify(habits);
+      console.log('habits have been saved to local storage \n', jsonValue);
+      await AsyncStorage.setItem('habitData', jsonValue);
+      // console.log('saved', jsonValue);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const deleteAllHabits = async () => {
     console.log('All habits have been deleted');
-    route.params.setHabits(['']);
+    let emptyHabits = [];
+    route.params.setHabits(emptyHabits);
+    saveHabit(emptyHabits);
   };
   const onClickColor = color => {
     console.log(colorData);

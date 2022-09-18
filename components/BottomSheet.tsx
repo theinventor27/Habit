@@ -55,8 +55,9 @@ const BottomSheet = ({
       },
     ];
     setHabits(newHabitItems);
-    // console.log(habits);
-
+    //Clear text input.
+    setGoalCount('');
+    setName('');
     try {
       const jsonValue = JSON.stringify(newHabitItems);
 
@@ -111,17 +112,24 @@ const BottomSheet = ({
 
           <View style={styles.form}>
             <BottomSheetTextInput
-              style={[styles.textInput, {backgroundColor: bgTheme}]}
+              style={[
+                styles.textInput,
+                {backgroundColor: bgTheme, color: textTheme},
+              ]}
               placeholder="Name"
               placeholderTextColor={textTheme}
               value={name}
               onChangeText={text => setName(text)}
             />
             <BottomSheetTextInput
-              style={[styles.textInput, {backgroundColor: bgTheme}]}
+              style={[
+                styles.textInput,
+                {backgroundColor: bgTheme, color: textTheme},
+              ]}
               keyboardType={'numeric'}
               placeholder="How many times a day?"
               placeholderTextColor={textTheme}
+              value={goalCount}
               onChangeText={text => setGoalCount(text)}
             />
             <TouchableOpacity
