@@ -19,7 +19,6 @@ Adding a habit is simple. Just click the "+" button at the bottom of the screen.
 
 
 **Habit Details:**
-
 -----------------------------------
 
 By clicking on the habit name you can see the habit details page. This page allows you to increase and decrease the count of the habit, view your current streak, longest streak, and 7 day completion rate. It also has a graph that displays how often you completed the habit in the last 7 days.
