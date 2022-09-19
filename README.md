@@ -13,11 +13,15 @@ You can easily track all of your habits and see your progress for each habit dis
 
 
 
+
+
 **Habit Details:**
 
 By clicking on the habit name you can see the habit details page. This page allows you to increase and decrease the count of the habit, view your current streak, longest streak, and 7 day completion rate. It also has a graph that displays how often you completed the habit in the last 7 days.
 
 <img src="https://user-images.githubusercontent.com/79227874/190933754-64b72554-054c-492b-ba1c-008479a8bc23.png" width="217.5" height="474.75"><img src="https://user-images.githubusercontent.com/79227874/190933743-e433a2f2-c6e3-4998-ae07-b33204099f21.png" width="217.5" height="474.75">
+
+
 
 
 **Customizable:**
