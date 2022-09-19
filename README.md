@@ -20,4 +20,4 @@ By clicking on the habit name you can see the habit details page. This page allo
 **Customizable:**
 The settings allows the user to visually customize the app. The app support both light and dark mode. It also allows the user to change the theme color of the circular progress bar. There are many different colors available.
 
-<img src="https://user-images.githubusercontent.com/79227874/190933671-1e3b5017-c235-41a8-bf73-bf875cc2ced6.png" width="145.25" height="316.5"><img src="https://user-images.githubusercontent.com/79227874/190933667-b0979853-527e-4280-8e42-da65c758c91b.png" width="145.25" height="316.5">
+<img src="https://user-images.githubusercontent.com/79227874/190933671-1e3b5017-c235-41a8-bf73-bf875cc2ced6.png" width="217.5" height="474.75"><img src="https://user-images.githubusercontent.com/79227874/190933667-b0979853-527e-4280-8e42-da65c758c91b.png" width="217.5" height="474.75">
