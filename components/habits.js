@@ -180,7 +180,7 @@ const habits = ({
       console.log(error);
     }
   };
-  //! UseEffect is causing my calculations to act weird. I need to figure out
+  //! UseEffect is causing my calculations to act weird. I need to figure out 
   //! another way to check how many days ago we logged in, probably without using a for loop.
   const newDay = () => {
     if (resetHabits) {
