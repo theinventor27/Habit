@@ -18,29 +18,55 @@ const Settings = ({route}) => {
   const [textTheme, setTextTheme] = useState(route.params.textTheme);
   const [bgTheme, setBgTheme] = useState(route.params.bgTheme);
   //Switch states
-  const [isEnabled, setIsEnabled] = useState();
+  const [isEnabled, setIsEnabled] = useState(getSwitchState);
+
+  //Runs when dark mode switch is toggled
   const toggleSwitch = async () => {
-    var scheme = '';
+    var _isEnabled = !isEnabled;
     setIsEnabled(previousState => !previousState);
 
-    if (isEnabled) {
+    var scheme = '';
+
+    if (_isEnabled) {
       scheme = 'dark';
       route.params.setBgTheme('#222324');
       setBgTheme('#222324');
       route.params.setTextTheme('#fff');
       setTextTheme('#fff');
-      console.log(isEnabled);
+      console.log(_isEnabled);
     } else {
       scheme = 'light';
       route.params.setBgTheme('#fff');
       setBgTheme('#fff');
       route.params.setTextTheme('#000000');
       setTextTheme('#000000');
-      console.log(isEnabled);
+      console.log(_isEnabled);
     }
     //save either 'dark' or 'light' as scheme in asyncstorage
     try {
       await AsyncStorage.setItem('Scheme', scheme);
+    } catch (error) {
+      console.log(error);
+    }
+    //Save switch state to async storage
+    try {
+      console.log('save', _isEnabled);
+      await AsyncStorage.setItem('themeSwitchState', _isEnabled.toString());
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  //Get switch state from asyncstorage
+  const getSwitchState = async () => {
+    try {
+      const switchState = await AsyncStorage.getItem('themeSwitchState');
+      if (switchState == 'true') {
+        setIsEnabled(true);
+      } else {
+        setIsEnabled(false);
+      }
+      console.log('from asyncstorage', switchState);
     } catch (error) {
       console.log(error);
     }
@@ -135,6 +161,10 @@ const Settings = ({route}) => {
     </>
   );
 
+  useEffect(() => {
+    getSwitchState();
+  }, []);
+
   return (
     <SafeAreaView style={[styles.screen, {backgroundColor: bgTheme}]}>
       <View style={styles.screen}>
@@ -149,8 +179,8 @@ const Settings = ({route}) => {
             trackColor={{false: '#fff', true: '#000000'}}
             thumbColor={isEnabled ? '#f4f3f4' : '#f4f3f4'}
             ios_backgroundColor="#a3a3a3"
-            onValueChange={() => toggleSwitch()}
-            value={!isEnabled}
+            onValueChange={toggleSwitch}
+            value={isEnabled}
           />
         </View>
         <Text style={[styles.themeText, {color: textTheme}]}>

@@ -30,8 +30,6 @@ const App = () => {
   const [resetHabits, setResetHabits] = useState(false);
 
   //Theme
-  const [isDarkMode, setIsDarkMode] = useState(false);
-
   const [habitTheme, setHabitTheme] = useState('red');
   const [textTheme, setTextTheme] = useState('#fff');
   const [bgTheme, setBgTheme] = useState('#333');
@@ -94,7 +92,6 @@ const App = () => {
               habits: habits,
               setHabits: setHabits,
               //themes
-              isDarkMode: isDarkMode,
               textTheme: textTheme,
               setTextTheme: setTextTheme,
               bgTheme: bgTheme,
