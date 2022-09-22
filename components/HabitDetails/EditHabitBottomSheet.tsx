@@ -16,6 +16,9 @@ const EditHabitBottomSheet = ({
   id,
   setGoalCount,
   setName,
+  name,
+  currentCount,
+  setCurrentCount,
   //Themes
   habitTheme,
   textTheme,
@@ -53,13 +56,14 @@ const EditHabitBottomSheet = ({
     //Check if current count is larger than goal count, if so, decrease current count
     //to goal count. This way, when we decrease the goal count, the current count does not get
     //stuck at a higher number than possible.
-    // if (thisHabit['currentCount'] > goalCount) {
-    //   thisHabit['currentCount'] = goalCount;
-    // }
+    if (thisHabit['currentCount'] > _goalCount) {
+      thisHabit['currentCount'] = _goalCount;
+      setCurrentCount(_goalCount);
+    }
     thisHabit['goalCount'] = _goalCount;
     thisHabit['name'] = _name;
-    setGoalCount = _goalCount;
-    setName = _name;
+    setGoalCount(_goalCount);
+    setName(_name);
     setHabits(habitsCopy);
     saveHabit();
   };
@@ -112,6 +116,7 @@ const EditHabitBottomSheet = ({
               <TextInput
                 placeholder="How many times a day?"
                 placeholderTextColor={textTheme}
+                keyboardType="number-pad"
                 value={_goalCount}
                 onChangeText={text => _setGoalCount(text)}
                 style={[

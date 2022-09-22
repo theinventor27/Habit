@@ -19,7 +19,7 @@ const HabitDetails = ({route}) => {
   );
   const [goalCount, setGoalCount] = useState(route.params.goalCount);
   const [isEditing, setIsEditing] = useState(false);
-
+  const [name, setName] = useState(route.params.name);
   const navigation = useNavigation();
 
   const saveHabit = async () => {
@@ -192,7 +192,7 @@ const HabitDetails = ({route}) => {
     <>
       <View style={styles.titleWrapper}>
         <Text style={[styles.appTitle, {color: route.params.textTheme}]}>
-          {route.params.name}
+          {name}
         </Text>
         <TouchableOpacity
           style={[
@@ -275,8 +275,10 @@ const HabitDetails = ({route}) => {
         setHabits={route.params.setHabits}
         //Habit Details
         id={route.params.id}
-        name={route.params.name}
-        setName={route.params.setName}
+        name={name}
+        setName={setName}
+        currentCount={currentCount}
+        setCurrentCount={setCurrentCount}
         setGoalCount={route.params.setGoalCount}
         goalCount={route.params.goalCount}
         //Themes

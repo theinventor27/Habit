@@ -126,7 +126,7 @@ const BottomSheet = ({
                 styles.textInput,
                 {backgroundColor: bgTheme, color: textTheme},
               ]}
-              keyboardType={'numeric'}
+              keyboardType={'number-pad'}
               placeholder="How many times a day?"
               placeholderTextColor={textTheme}
               value={goalCount}
