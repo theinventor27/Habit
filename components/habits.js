@@ -14,7 +14,9 @@ const habits = ({
   resetHabits,
   setResetHabits,
   name,
+  setName,
   goalCount,
+  setGoalCount,
   id,
   currentCount,
   currentStreak,
@@ -139,12 +141,13 @@ const habits = ({
   //Navigate to habit detail page
   const onPressHabitName = () => {
     navigation.navigate('HabitDetails', {
-      habitTheme: habitTheme,
       habits: habits,
       setHabits: setHabits,
       name: name,
+      setName: setName,
       id: id,
       goalCount: goalCount,
+      setGoalCount: setGoalCount,
       thisCurrentCount: thisCurrentCount,
       setThisCurrentCount: setThisCurrentCount,
       last7dCompletedData: last7dCompletedData,
@@ -156,6 +159,7 @@ const habits = ({
       //theme
       bgTheme: bgTheme,
       textTheme: textTheme,
+      habitTheme: habitTheme,
     });
   };
 

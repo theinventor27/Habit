@@ -12,12 +12,14 @@ import CircularProgress from 'react-native-circular-progress-indicator';
 import LineChart7d from '../components/HabitDetails/LineChart7d';
 import HabitStats from '../components/HabitDetails/HabitStats';
 import {useNavigation} from '@react-navigation/native';
-
+import EditHabitBottomSheet from '../components/HabitDetails/EditHabitBottomSheet';
 const HabitDetails = ({route}) => {
   const [currentCount, setCurrentCount] = useState(
     route.params.thisCurrentCount,
   );
   const [goalCount, setGoalCount] = useState(route.params.goalCount);
+  const [isEditing, setIsEditing] = useState(false);
+
   const navigation = useNavigation();
 
   const saveHabit = async () => {
@@ -181,13 +183,28 @@ const HabitDetails = ({route}) => {
     saveHabit();
     navigation.navigate('Home');
   };
+  const onPressEditHabit = () => {
+    console.log('pressed');
 
+    setIsEditing(true);
+  };
   const ListHeader = () => (
     <>
       <View style={styles.titleWrapper}>
         <Text style={[styles.appTitle, {color: route.params.textTheme}]}>
           {route.params.name}
         </Text>
+        <TouchableOpacity
+          style={[
+            styles.editHabitTouchableOpacity,
+            {borderColor: route.params.habitTheme},
+          ]}
+          onPress={() => onPressEditHabit()}>
+          <Text
+            style={[styles.editHabitText, {color: route.params.habitTheme}]}>
+            Edit Habit
+          </Text>
+        </TouchableOpacity>
       </View>
       <View style={styles.divider} />
     </>
@@ -225,6 +242,7 @@ const HabitDetails = ({route}) => {
         </View>
       </View>
       <View style={styles.componenetDivider} />
+
       <HabitStats
         goalCount={route.params.goalCount}
         last7dCompletedData={route.params.last7dCompletedData}
@@ -243,12 +261,29 @@ const HabitDetails = ({route}) => {
         bgtheme={route.params.bgTheme}
         textTheme={route.params.textTheme}
       />
+
       <View style={styles.push} />
       <View style={styles.deleteWrapper}>
         <TouchableOpacity onPress={() => deleteThisHabit()}>
           <Text style={styles.deleteText}>DELETE</Text>
         </TouchableOpacity>
       </View>
+      <EditHabitBottomSheet
+        isEditing={isEditing}
+        setIsEditing={setIsEditing}
+        habits={route.params.habits}
+        setHabits={route.params.setHabits}
+        //Habit Details
+        id={route.params.id}
+        name={route.params.name}
+        setName={route.params.setName}
+        setGoalCount={route.params.setGoalCount}
+        goalCount={route.params.goalCount}
+        //Themes
+        bgTheme={route.params.bgTheme}
+        textTheme={route.params.textTheme}
+        habitTheme={route.params.habitTheme}
+      />
     </SafeAreaView>
   );
 };
@@ -276,7 +311,20 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginLeft: 15,
   },
-
+  titleWrapper: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  editHabitTouchableOpacity: {
+    borderWidth: 1,
+    borderRadius: 50,
+    marginRight: 15,
+  },
+  editHabitText: {
+    paddingHorizontal: 10,
+    paddingVertical: 2,
+  },
   habitCountWrapper: {
     flexDirection: 'row',
     marginTop: 30,

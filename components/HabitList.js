@@ -8,6 +8,8 @@ const HabitList = ({
   habitTheme,
   habits,
   setHabits,
+  setGoalCount,
+  setName,
   resetHabits,
   setResetHabits,
   textTheme,
@@ -46,6 +48,8 @@ const HabitList = ({
             setHabits={setHabits}
             resetHabits={resetHabits}
             setResetHabits={setResetHabits}
+            setGoalCount={setGoalCount}
+            setName={setName}
             id={item.id}
             name={item.name}
             goalCount={item.goalCount}
