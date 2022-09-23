@@ -38,7 +38,7 @@ const App = () => {
     try {
       const jsonValue = JSON.parse(await AsyncStorage.getItem('habitData'));
       setHabits(jsonValue);
-      console.log('getHabit() from home has run', jsonValue);
+      // console.log('getHabit() from home has run', jsonValue);
     } catch (e) {
       // error reading value
       console.log(e);
@@ -128,12 +128,12 @@ const App = () => {
       if (scheme == 'dark') {
         setTextTheme('#fff');
         setBgTheme('#222324');
-        console.log('theme is dark');
+        // console.log('theme is dark');
       }
       if (scheme == 'light') {
         setTextTheme('#000000');
         setBgTheme('#fff');
-        console.log('theme is light');
+        // console.log('theme is light');
       }
     } catch (e) {
       // error reading value

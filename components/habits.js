@@ -199,19 +199,23 @@ const habits = ({
       //Check how many days its been since we logged in.
       //We only have to check if the habit was completed within the last 7 days.
       const today = new Date();
-      const yesterday = new Date(today);
+      var yesterday = new Date(today);
 
-      var daysSinceWeLoggedIn;
+      var daysSinceWeLoggedIn = '';
       //a for loop that checks how many days ago, starting with 7 days ago,
       //the habit was completed. If longer than 7 days shift data 7 days.
-      for (let x = 0; x >= 7; x++) {
+      for (let x = 1; x <= 6; x++) {
         yesterday.setDate(yesterday.getDate() - x);
-        console.log('--------------------- \n', yesterday.toDateString());
+        console.log(
+          '--------------------------------- \n',
+          yesterday.toDateString(),
+        );
         if (lastCompletedDate == yesterday.toDateString()) {
-          daysSinceWeLoggedIn = x;
+          console.log(yesterday.toDateString(), 'HABIT COMPLETED THIS DAY ^^');
         } else {
-          console.log('++++++++ \n', yesterday.toDateString());
+          console.log('\t Habit was not completed this day');
         }
+        yesterday = new Date(today);
       }
       //Remove farthest day and add new day to 7dCompletedData
       thisHabit['last7dCompletedData'].shift();

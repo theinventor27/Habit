@@ -19,7 +19,7 @@ const HabitList = ({
     try {
       const jsonValue = JSON.parse(await AsyncStorage.getItem('habitData'));
       setHabits(jsonValue);
-      console.log('Habit list componenet retrieved:', jsonValue);
+      // console.log('Habit list componenet retrieved:', jsonValue);
     } catch (e) {
       // error reading value
       console.log(e);
