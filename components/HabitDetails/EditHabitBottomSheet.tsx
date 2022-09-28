@@ -6,6 +6,8 @@ import {
   TouchableOpacity,
 } from '@gorhom/bottom-sheet';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useNavigation} from '@react-navigation/native';
+
 const EditHabitBottomSheet = ({
   isEditing,
   setIsEditing,
@@ -19,13 +21,16 @@ const EditHabitBottomSheet = ({
   name,
   currentCount,
   setCurrentCount,
+
   //Themes
   habitTheme,
   textTheme,
   bgTheme,
 }) => {
-  const [_goalCount, _setGoalCount] = useState();
-  const [_name, _setName] = useState();
+  const navigation = useNavigation();
+
+  const [thisGoalCount, setThisGoalCount] = useState();
+  const [thisName, setThisName] = useState();
 
   // ref
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
@@ -53,17 +58,18 @@ const EditHabitBottomSheet = ({
     let habitsCopy = habits;
     //find this habit obj. within the new copy of habits
     let thisHabit = habitsCopy.find(obj => obj.id === id);
+
+    thisHabit['goalCount'] = thisGoalCount;
+    setGoalCount(thisGoalCount);
+    thisHabit['name'] = thisName;
+    setName(thisName);
     //Check if current count is larger than goal count, if so, decrease current count
     //to goal count. This way, when we decrease the goal count, the current count does not get
     //stuck at a higher number than possible.
-    if (thisHabit['currentCount'] > _goalCount) {
-      thisHabit['currentCount'] = _goalCount;
-      setCurrentCount(_goalCount);
+    if (currentCount > thisGoalCount) {
+      thisHabit['currentCount'] = thisGoalCount;
+      setCurrentCount(thisGoalCount);
     }
-    thisHabit['goalCount'] = _goalCount;
-    thisHabit['name'] = _name;
-    setGoalCount(_goalCount);
-    setName(_name);
     setHabits(habitsCopy);
     saveHabit();
   };
@@ -74,6 +80,7 @@ const EditHabitBottomSheet = ({
       console.log(jsonValue);
       await AsyncStorage.setItem('habitData', jsonValue);
       // console.log(jsonValue, ' = json file')
+      navigation.navigate('Home', {});
     } catch (error) {
       console.log(error);
     }
@@ -106,8 +113,8 @@ const EditHabitBottomSheet = ({
               <TextInput
                 placeholder="Habit Name"
                 placeholderTextColor={textTheme}
-                value={_name}
-                onChangeText={text => _setName(text)}
+                value={thisName}
+                onChangeText={text => setThisName(text)}
                 style={[
                   styles.textInput,
                   {backgroundColor: bgTheme, color: textTheme},
@@ -117,8 +124,8 @@ const EditHabitBottomSheet = ({
                 placeholder="How many times a day?"
                 placeholderTextColor={textTheme}
                 keyboardType="number-pad"
-                value={_goalCount}
-                onChangeText={text => _setGoalCount(text)}
+                value={thisGoalCount}
+                onChangeText={text => setThisGoalCount(text)}
                 style={[
                   styles.textInput,
                   {backgroundColor: bgTheme, color: textTheme},

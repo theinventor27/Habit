@@ -13,6 +13,7 @@ const habits = ({
   setHabits,
   resetHabits,
   setResetHabits,
+
   name,
   setName,
   goalCount,
@@ -77,6 +78,7 @@ const habits = ({
       if (longestStreak == 0) {
         thisHabit['longestStreak'] = 1;
         setThisLongestStreak(1);
+        5;
       }
 
       //set date to check if completed in a streak.
@@ -166,7 +168,7 @@ const habits = ({
   //Touchable opacity method to increase count.
   const onPressAdd = () => {
     increaseCount();
-    // console.log(thisCurrentCount);
+    console.log(thisCurrentCount);
   };
 
   //Touchable opacity method to decrease count.
@@ -184,6 +186,7 @@ const habits = ({
       console.log(error);
     }
   };
+
   //! UseEffect is causing my calculations to act weird. I need to figure out
   //! another way to check how many days ago we logged in, probably without using a for loop.
   const newDay = () => {
@@ -193,6 +196,7 @@ const habits = ({
       let thisHabit = habitsCopy.find(obj => obj.id === id);
       //Set habit current count to 0.
       thisHabit['currentCount'] = 0;
+
       setThisCurrentCount(0);
       //get last completed date
       let lastCompletedDate = thisHabit['lastCompletedDate'];
@@ -200,7 +204,23 @@ const habits = ({
       //We only have to check if the habit was completed within the last 7 days.
       const today = new Date();
       var yesterday = new Date(today);
-
+      //Check if we need to reset streak to 0.
+      //If we did not complete this habit the last 2 days. We need to reset the habit.
+      const checkIfStreakNeedsToBeSetToZero = () => {
+        //check last if completed last two days.
+        //the last two days would be the last two numbers of this array.
+        let data = thisHabit['last7dCompletedData'];
+        console.log(data);
+        //check if the goalCount was reached last two days.
+        let oneDayAgo = new Date(today);
+        oneDayAgo.setDate(oneDayAgo.getDate() - 1);
+        let twoDayAgo = new Date(today);
+        twoDayAgo.setDate(twoDayAgo.getDate() - 2);
+        if (goalCount == twoDayAgo && goalCount == oneDayAgo) {
+          console.log('We do not need to reset streak habit');
+        }
+      };
+      checkIfStreakNeedsToBeSetToZero();
       var daysSinceWeLoggedIn = '';
       //a for loop that checks how many days ago, starting with 7 days ago,
       //the habit was completed. If longer than 7 days shift data 7 days.

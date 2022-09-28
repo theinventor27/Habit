@@ -273,12 +273,14 @@ const HabitDetails = ({route}) => {
         setIsEditing={setIsEditing}
         habits={route.params.habits}
         setHabits={route.params.setHabits}
+        habitUpdated={route.params.habitUpdated}
+        setHabitUpdated={route.params.setHabitUpdated}
         //Habit Details
         id={route.params.id}
         name={name}
         setName={setName}
         currentCount={currentCount}
-        setCurrentCount={setCurrentCount}
+        setCurrentCount={route.params.setThisCurrentCount}
         setGoalCount={route.params.setGoalCount}
         goalCount={route.params.goalCount}
         //Themes

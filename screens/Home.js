@@ -38,7 +38,7 @@ const App = () => {
     try {
       const jsonValue = JSON.parse(await AsyncStorage.getItem('habitData'));
       setHabits(jsonValue);
-      // console.log('getHabit() from home has run', jsonValue);
+      console.log('getHabit() from home has run', jsonValue);
     } catch (e) {
       // error reading value
       console.log(e);
@@ -139,12 +139,13 @@ const App = () => {
       // error reading value
       console.log(e);
     }
+    console.log('isFocused status', isFocused);
   };
 
   useEffect(() => {
+    getHabit();
     checkTime();
     getTheme();
-    getHabit();
   }, [resetHabits, isFocused]);
 
   return (
