@@ -5,6 +5,7 @@ import {
   SafeAreaView,
   Image,
   TouchableOpacity,
+  StatusBar,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
@@ -46,24 +47,21 @@ const App = () => {
     }
   };
   const checkTime = async () => {
-    var date = new Date().getDate();
-    var month = new Date().getMonth() + 1;
-    var year = new Date().getFullYear();
+    const today = new Date();
+    const yesterday = new Date(today);
+    //Get yesterday's date.
+    yesterday.setDate(yesterday.getDate() - 1);
 
-    // console.log(month + '-' + date + '-' + year);
-    // You can turn it in to your desired format
-    let currentDate = [month, date, year]; //format: m-d-y;
     try {
       var lastOnlineDate = await AsyncStorage.getItem('lastOnlineDate');
-      lastOnlineDate = lastOnlineDate;
-      console.log('last logged in:', lastOnlineDate);
+      // console.log('last logged in:', lastOnlineDate);
       if (lastOnlineDate == null) {
-        console.log('we have no data.');
+        // console.log('we have no data.');
       }
-      if (lastOnlineDate == currentDate) {
+      if (lastOnlineDate == today.toDateString()) {
         console.log('You last logged in today!');
       }
-      if (lastOnlineDate != currentDate) {
+      if (lastOnlineDate != today.toDateString()) {
         //reset habits
         setResetHabits(true);
         console.log('The last time we logged in was not today');
@@ -73,11 +71,11 @@ const App = () => {
       console.log(e);
     }
     try {
-      await AsyncStorage.setItem('lastOnlineDate', currentDate.toString());
-      console.log(
-        'Saving lastOnlineDate to AsyncStorage:',
-        currentDate.toString(),
-      );
+      await AsyncStorage.setItem('lastOnlineDate', today.toDateString());
+      // console.log(
+      //   'Saving lastOnlineDate to AsyncStorage:',
+      //   currentDate.toString(),
+      // );
     } catch (e) {
       // error reading value
       console.log(e);
@@ -154,6 +152,13 @@ const App = () => {
 
   return (
     <GestureHandlerRootView style={{flex: 1}}>
+      {/* if bgTheme is black, set white status bar */}
+      {bgTheme == '#222324' ? (
+        <StatusBar barStyle={'light-content'} />
+      ) : (
+        // else set status bar black
+        <StatusBar barStyle={'dark-content'} />
+      )}
       <SafeAreaView style={[styles.screen, {backgroundColor: bgTheme}]}>
         <ListHeader />
         <HabitList

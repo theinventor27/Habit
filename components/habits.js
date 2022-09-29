@@ -78,7 +78,8 @@ const habits = ({
       }
 
       //set date to check if completed in a streak.
-      thisHabit['lastCompletedDate'] = getCurrentDate();
+      const today = new Date();
+      thisHabit['lastCompletedDate'] = today.toDateString();
 
       //set copy as official habit
       setHabits(habitsCopy);
@@ -94,52 +95,46 @@ const habits = ({
       //each elements of the array. All elements should be the same except for the day.
       //The day should be 1 more than the last completed day.
       let lastCompletedDate = thisHabit['lastCompletedDate'];
-      todaysDate = getCurrentDate();
-      lastCompletedDate = lastCompletedDate.split('-');
-      todaysDate = todaysDate.split('-');
+      const today = new Date();
+      const yesterday = new Date(today);
+      //Get yesterday's date.
+      yesterday.setDate(yesterday.getDate() - 1);
 
-      if (
-        //check month
-        lastCompletedDate[0] == todaysDate[0] &&
-        //check year
-        lastCompletedDate[2] == todaysDate[2]
-      ) {
-        //check if it was completed the day before
-        if (lastCompletedDate[1] == todaysDate[1] - 1) {
-          //increase string by 1.
-          let x = thisHabit['currentStreak'] + 1;
-          thisHabit['currentStreak'] = x;
-          //check if currentStreak is longer than longestStreak
-          if (x > longestStreak) {
-            setThisLongestStreak(x);
-            thisHabit['longestStreak'] = x;
-          }
-          setThisCurrentStreak(x);
-          //set date to check if completed in a streak.
-          thisHabit['lastCompletedDate'] = getCurrentDate();
-          //set copy as official habit
-
-          setHabits(habitsCopy);
-          saveHabit();
-        } else {
-          setThisCurrentStreak(1);
+      //check if lastCompletedDate was yesterday, if so, add 1 to streak
+      if (lastCompletedDate == yesterday.toDateString()) {
+        //increase streak by 1.
+        let x = thisHabit['currentStreak'] + 1;
+        thisHabit['currentStreak'] = x;
+        //check if currentStreak is longer than longestStreak
+        if (x > longestStreak) {
+          setThisLongestStreak(x);
+          thisHabit['longestStreak'] = x;
         }
+        setThisCurrentStreak(x);
+        //set date to check later if completed in a streak.
+        thisHabit['lastCompletedDate'] = today.toDateString();
+        //set copy as official habit
+        setHabits(habitsCopy);
+        saveHabit();
+        //Else, habit was not completed yesterday
       } else {
         setThisCurrentStreak(1);
       }
+    } else {
+      setThisCurrentStreak(1);
     }
   };
 
   //returns current date formatted d-m-yyyy
-  const getCurrentDate = () => {
-    var date = new Date().getDate();
-    var month = new Date().getMonth() + 1;
-    var year = new Date().getFullYear();
+  // const getCurrentDate = () => {
+  //   var date = new Date().getDate();
+  //   var month = new Date().getMonth() + 1;
+  //   var year = new Date().getFullYear();
 
-    // console.log(month + '-' + date + '-' + year);
-    // You can turn it in to your desired format
-    return month + '-' + date + '-' + year; //format: d-m-y;
-  };
+  //   // console.log(month + '-' + date + '-' + year);
+  //   // You can turn it in to your desired format
+  //   return month + '-' + date + '-' + year; //format: d-m-y;
+  // };
 
   //Navigate to habit detail page
   const onPressHabitName = () => {
@@ -185,13 +180,35 @@ const habits = ({
       console.log(error);
     }
   };
+  //! UseEffect is causing my calculations to act weird. I need to figure out
+  //! another way to check how many days ago we logged in, probably without using a for loop.
   const newDay = () => {
     if (resetHabits) {
+      console.log('--------------- \n new day');
       let habitsCopy = habits;
       let thisHabit = habitsCopy.find(obj => obj.id === id);
       //Set habit current count to 0.
       thisHabit['currentCount'] = 0;
       setThisCurrentCount(0);
+      //get last completed date
+      let lastCompletedDate = thisHabit['lastCompletedDate'];
+      //Check how many days its been since we logged in.
+      //We only have to check if the habit was completed within the last 7 days.
+      const today = new Date();
+      const yesterday = new Date(today);
+
+      var daysSinceWeLoggedIn;
+      //a for loop that checks how many days ago, starting with 7 days ago,
+      //the habit was completed. If longer than 7 days shift data 7 days.
+      for (let x = 0; x >= 7; x++) {
+        yesterday.setDate(yesterday.getDate() - x);
+        console.log('--------------------- \n', yesterday.toDateString());
+        if (lastCompletedDate == yesterday.toDateString()) {
+          daysSinceWeLoggedIn = x;
+        } else {
+          console.log('++++++++ \n', yesterday.toDateString());
+        }
+      }
       //Remove farthest day and add new day to 7dCompletedData
       thisHabit['last7dCompletedData'].shift();
       thisHabit['last7dCompletedData'].push(0);
