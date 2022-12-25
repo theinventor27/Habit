@@ -113,19 +113,57 @@ const Settings = ({route}) => {
     console.log('Color has been changed to', color);
   };
 
-  colorData = [
-    '#72FFFF',
-    '#0CECDD',
-    '#00FFAB',
-    '#FFF338',
-    '#49FF00',
-    '#3EC70B',
-    '#FF67E7',
-    '#C400FF',
-    '#D61C4E',
-    '#1A4D2E',
-    '#000D6B',
-    '#000000',
+  colorDataLightMode = [
+    '#D3D3D3', // light gray
+    '#DCDCDC', // gainsboro
+    '#C0C0C0', // silver
+    '#A9A9A9', // dark gray
+    '#808080', // gray
+    '#FFB6C1', // light pink
+    '#FFC0CB', // pink
+    '#DB7093', // pale violet red
+    '#FF69B4', // hot pink
+    '#FF1493', // deep pink
+    '#C71585', // medium violet red
+    '#ADD8E6', // light blue
+    '#87CEEB', // sky blue
+    '#00BFFF', // deep sky blue
+    '#1E90FF', // dodger blue
+    '#0000FF', // blue
+    '#90EE90', // light green
+    '#00FF00', // green
+    '#008000', // dark green
+    '#006400', // dark olive green
+    '#FFFF00', // yellow
+    '#FFD700', // gold
+    '#FFA500', // orange
+    '#FF8C00', // dark orange
+  ];
+  colorDataDarkMode = [
+    '#FFFFFF', // white
+    '#FFCCCC', // light red
+    '#FF9999', // bright red
+    '#FF6666', // orange
+    '#FF3333', // bright orange
+    '#FF0000', // red
+    '#CC0000', // dark red
+    '#990000', // maroon
+    '#FFFF00', // yellow
+    '#FFCC00', // orange-yellow
+    '#FF9900', // bright yellow
+    '#FF6600', // golden yellow
+    '#FF3300', // dark yellow
+    '#CC9900', // brown
+    '#FFFF99', // light yellow
+    '#FFCC99', // peach
+    '#FF9999', // pink
+    '#FF6699', // bright pink
+    '#FF3399', // dark pink
+    '#CC0099', // purple
+    '#990099', // dark purple
+    '#660099', // indigo
+    '#330099', // dark indigo
+    '#000099', // dark blue
   ];
   const saveColor = async color => {
     try {
@@ -155,7 +193,7 @@ const Settings = ({route}) => {
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
         scrollEnabled={false}
-        data={colorData}
+        data={isEnabled ? colorDataDarkMode : colorDataLightMode}
         renderItem={({item}) => <ColorView colorData={item} />}
       />
     </>
@@ -170,6 +208,21 @@ const Settings = ({route}) => {
       <View style={styles.screen}>
         <ListHeader />
 
+        {/* <Text style={[styles.themeText, {color: textTheme}]}>
+          Choose Theme:
+        </Text> */}
+        <View style={styles.circularProgressExample}>
+          <CircularProgress
+            value={randomValue}
+            maxValue={10}
+            radius={70}
+            inActiveStrokeColor={textTheme}
+            activeStrokeColor={exampleColor}
+            progressValueColor={exampleColor}
+            inActiveStrokeOpacity={0.2}
+          />
+        </View>
+        <FlatListWithColors />
         <View style={styles.darkModeWrapper}>
           <Text style={[styles.darkModeText, {color: textTheme}]}>
             Dark Mode:
@@ -183,22 +236,6 @@ const Settings = ({route}) => {
             value={isEnabled}
           />
         </View>
-        <Text style={[styles.themeText, {color: textTheme}]}>
-          Choose Theme:
-        </Text>
-        <View style={styles.circularProgressExample}>
-          <CircularProgress
-            value={randomValue}
-            maxValue={10}
-            radius={70}
-            inActiveStrokeColor={textTheme}
-            activeStrokeColor={exampleColor}
-            progressValueColor={exampleColor}
-            inActiveStrokeOpacity={0.2}
-          />
-        </View>
-        <FlatListWithColors />
-
         <TouchableOpacity onPress={() => deleteAllHabits()}>
           <Text style={[styles.deleteAllHabits]}>DELETE ALL HABITS</Text>
         </TouchableOpacity>
@@ -257,7 +294,7 @@ const styles = StyleSheet.create({
   circularProgressExample: {
     justifyContent: 'center',
     alignSelf: 'center',
-    marginTop: 10,
+    marginTop: 25,
     marginBottom: 10,
   },
   signiture: {

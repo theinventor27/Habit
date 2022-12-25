@@ -44,6 +44,7 @@ const App = () => {
       console.log(e);
     }
   };
+
   const checkTime = async () => {
     const today = new Date();
     const yesterday = new Date(today);
