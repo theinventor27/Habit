@@ -25,9 +25,6 @@ const LineChart7d = ({theme, last7dCompletedData, textTheme, bgTheme}) => {
 
   return (
     <View style={styles.chartWrapper}>
-      <Text style={[styles.chartTitle, {color: textTheme}]}>
-        7D Habit Chart
-      </Text>
       <LineChart
         data={{
           labels: last7Days,
@@ -42,23 +39,29 @@ const LineChart7d = ({theme, last7dCompletedData, textTheme, bgTheme}) => {
         yAxisLabel=""
         yAxisInterval={1} // optional, defaults to 1
         chartConfig={{
+          strokeWidth: 1.5,
           backgroundColor: '#0000ffff',
           backgroundGradientToOpacity: 0,
           backgroundGradientFromOpacity: 0,
           backgroundGradientFrom: '#0000ffff',
           backgroundGradientTo: '#0000ffff',
+
           decimalPlaces: 2, // optional, defaults to 2dp
+          propsForBackgroundLines: {
+            strokeWidth: 0,
+          },
           color: (opacity = 0.3) => textTheme,
           labelColor: (opacity = 0.2) => textTheme,
           style: {
             borderRadius: 16,
           },
           propsForDots: {
-            r: '6',
+            r: '3',
             strokeWidth: '2',
             stroke: theme,
           },
         }}
+        bezier
       />
     </View>
   );
@@ -68,7 +71,7 @@ export default LineChart7d;
 
 const styles = StyleSheet.create({
   chartWrapper: {
-    marginTop: 0,
+    marginTop: 40,
   },
   chartTitle: {
     textAlign: 'center',

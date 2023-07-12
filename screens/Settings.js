@@ -12,11 +12,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 //Progress Bar Componenets
 import CircularProgress from 'react-native-circular-progress-indicator';
 
-const Settings = ({route}) => {
+const Settings = ({route, navigation}) => {
   const [exampleColor, setExampleColor] = useState(route.params.habitTheme);
   const [randomValue, setRandomValue] = useState(5);
   const [textTheme, setTextTheme] = useState(route.params.textTheme);
   const [bgTheme, setBgTheme] = useState(route.params.bgTheme);
+
   //Switch states
   const [isEnabled, setIsEnabled] = useState(getSwitchState);
 
@@ -99,9 +100,8 @@ const Settings = ({route}) => {
     route.params.setHabits(emptyHabits);
     saveHabit(emptyHabits);
   };
-  const onClickColor = color => {
-    console.log(colorData);
 
+  const onClickColor = color => {
     //uses route to set theme globally
     route.params.setHabitTheme(color);
 
@@ -114,57 +114,38 @@ const Settings = ({route}) => {
   };
 
   colorDataLightMode = [
-    '#D3D3D3', // light gray
-    '#DCDCDC', // gainsboro
-    '#C0C0C0', // silver
-    '#A9A9A9', // dark gray
-    '#808080', // gray
-    '#FFB6C1', // light pink
-    '#FFC0CB', // pink
-    '#DB7093', // pale violet red
-    '#FF69B4', // hot pink
-    '#FF1493', // deep pink
-    '#C71585', // medium violet red
-    '#ADD8E6', // light blue
-    '#87CEEB', // sky blue
-    '#00BFFF', // deep sky blue
-    '#1E90FF', // dodger blue
-    '#0000FF', // blue
-    '#90EE90', // light green
-    '#00FF00', // green
-    '#008000', // dark green
-    '#006400', // dark olive green
-    '#FFFF00', // yellow
-    '#FFD700', // gold
-    '#FFA500', // orange
-    '#FF8C00', // dark orange
+    '#FF4040', // Bright Red
+    '#FF8C78', // Bright Tomato
+    '#FFC040', // Bright Orange
+    '#FFD700', // Readable Yellow
+    '#00FF40', // Bright Green
+    '#40FF9C', // Bright Spring Green
+    '#B4D8DC', // Bright Light Teal
+    '#60E7D8', // Bright Lighter Teal
+    '#40FFFF', // Bright Cyan
+    '#8980B3', // Bright Light Indigo
+    '#D88FC0', // Bright Lighter Purple
+    '#FF40FF', // Bright Magenta
+    '#FF80B8', // Bright Brighter Pink
+    '#F08080', // Coral
   ];
   colorDataDarkMode = [
-    '#FFFFFF', // white
-    '#FFCCCC', // light red
-    '#FF9999', // bright red
-    '#FF6666', // orange
-    '#FF3333', // bright orange
-    '#FF0000', // red
-    '#CC0000', // dark red
-    '#990000', // maroon
-    '#FFFF00', // yellow
-    '#FFCC00', // orange-yellow
-    '#FF9900', // bright yellow
-    '#FF6600', // golden yellow
-    '#FF3300', // dark yellow
-    '#CC9900', // brown
-    '#FFFF99', // light yellow
-    '#FFCC99', // peach
-    '#FF9999', // pink
-    '#FF6699', // bright pink
-    '#FF3399', // dark pink
-    '#CC0099', // purple
-    '#990099', // dark purple
-    '#660099', // indigo
-    '#330099', // dark indigo
-    '#000099', // dark blue
+    '#FF0000', // Red
+    '#FF6347', // Tomato
+    '#FFA500', // Orange
+    '#FFFF00', // Yellow
+    '#FFD700', // Lighter Gold
+    '#00FF00', // Green
+    '#00FF7F', // Spring Green
+    '#AFEEEE', // Light Teal
+    '#40E0D0', // Lighter Teal
+    '#00FFFF', // Cyan
+    '#7B68EE', // Light Indigo
+    '#BA55D3', // Lighter Purple
+    '#FF00FF', // Magenta
+    '#FF69B4', // Brighter Pink
   ];
+
   const saveColor = async color => {
     try {
       await AsyncStorage.setItem('habitTheme', color);
@@ -189,7 +170,7 @@ const Settings = ({route}) => {
     <>
       <FlatList
         columnWrapperStyle={{justifyContent: 'space-around'}}
-        numColumns={Math.ceil(colorData.length / 2)}
+        numColumns={Math.ceil(colorDataDarkMode.length / 2)}
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
         scrollEnabled={false}
@@ -207,10 +188,6 @@ const Settings = ({route}) => {
     <SafeAreaView style={[styles.screen, {backgroundColor: bgTheme}]}>
       <View style={styles.screen}>
         <ListHeader />
-
-        {/* <Text style={[styles.themeText, {color: textTheme}]}>
-          Choose Theme:
-        </Text> */}
         <View style={styles.circularProgressExample}>
           <CircularProgress
             value={randomValue}
@@ -223,6 +200,7 @@ const Settings = ({route}) => {
           />
         </View>
         <FlatListWithColors />
+
         <View style={styles.darkModeWrapper}>
           <Text style={[styles.darkModeText, {color: textTheme}]}>
             Dark Mode:
@@ -236,11 +214,11 @@ const Settings = ({route}) => {
             value={isEnabled}
           />
         </View>
+
         <TouchableOpacity onPress={() => deleteAllHabits()}>
           <Text style={[styles.deleteAllHabits]}>DELETE ALL HABITS</Text>
         </TouchableOpacity>
       </View>
-      <Text style={styles.signiture}>Johan</Text>
     </SafeAreaView>
   );
 };
@@ -269,42 +247,31 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginLeft: 10,
-    marginTop: 25,
   },
+
   darkModeText: {
     marginRight: 15,
   },
-  themeText: {
-    fontSize: 15,
-    marginTop: 20,
-    marginLeft: 10,
-  },
+
   colorPicker: {
-    marginTop: 20,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+    marginTop: 10,
     justifyContent: 'space-around',
   },
+
   color: {
     height: 40,
     width: 40,
     borderRadius: 50,
     borderWidth: 1,
   },
+
   circularProgressExample: {
     justifyContent: 'center',
     alignSelf: 'center',
     marginTop: 25,
     marginBottom: 10,
   },
-  signiture: {
-    color: 'gray',
-    fontSize: 10,
-    fontFamily: 'AppleSDGothicNeo-Thin',
-    justifyContent: 'center',
-    textAlign: 'center',
-    height: 9,
-  },
+
   deleteAllHabits: {
     textAlign: 'center',
     color: 'red',

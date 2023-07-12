@@ -1,9 +1,10 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React, {useState, useEffect} from 'react';
+import {THEME_COLOR} from '../GLOBAL';
 
 const HabitStats = ({
   last7dCompletedData,
-  currentStreak,
+  currentStreak, // Add this line to receive the prop
   longestStreak,
   goalCount,
   //theme
@@ -28,7 +29,6 @@ const HabitStats = ({
 
   return (
     <View>
-      <Text style={[styles.title, {color: textTheme}]}>Statistics:</Text>
       <View style={styles.statsWrapper}>
         <View style={styles.statsDisplay}>
           <Text style={[styles.statsNum, {color: textTheme}]}>
@@ -82,8 +82,8 @@ const styles = StyleSheet.create({
     fontSize: 11,
   },
   statsNum: {
-    fontWeight: 'bold',
-    fontSize: 20,
+    fontWeight: '600',
+    fontSize: 22,
     textAlign: 'center',
   },
 });
