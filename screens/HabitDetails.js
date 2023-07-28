@@ -47,7 +47,7 @@ const HabitDetails = ({route}) => {
       //create copy of habits
       let habitsCopy = route.params.habits;
       //find this habit obj. within the new copy of habits
-      let thisHabit = habitsCopy.find(obj => obj.id === route.params.id);
+      let thisHabit = habitsCopy.find(obj => obj.id == route.params.id);
 
       setCurrentCount(currentCount + 1);
       route.params.setThisCurrentCount(currentCount + 1);
@@ -68,7 +68,7 @@ const HabitDetails = ({route}) => {
     //create copy of habits
     let habitsCopy = route.params.habits;
     //find this habit obj. within the new copy of habits
-    let thisHabit = habitsCopy.find(obj => obj.id === route.params.id);
+    let thisHabit = habitsCopy.find(obj => obj.id == route.params.id);
 
     //If currentStreak is 0 then we do not check if it was completed yesterday.
     if (thisHabit['currentStreak'] == 0) {
@@ -84,7 +84,7 @@ const HabitDetails = ({route}) => {
       }
 
       //set date to check if completed in a streak
-      thisHabit['lastCompletedDate'] = getCurrentDate();
+      thisHabit['lastCompletedDate'] = getTodaysDate();
       //set copy as official habit
       route.params.setHabits(habitsCopy);
       saveHabit();
@@ -93,7 +93,7 @@ const HabitDetails = ({route}) => {
       //create copy of habits
       let habitsCopy = route.params.habits;
       //find this habit obj. within the new copy of habits
-      let thisHabit = habitsCopy.find(obj => obj.id === route.params.id);
+      let thisHabit = habitsCopy.find(obj => obj.id == route.params.id);
 
       //Get last completed date and todays date and split them into an array to compare
       //each elements of the array. All elements should be the same except for the day.
@@ -120,9 +120,9 @@ const HabitDetails = ({route}) => {
       const yesterday = new Date(todaysYear, todaysMonth - 1, todaysDay - 1);
 
       if (
-        lastCompleted.getFullYear() === yesterday.getFullYear() &&
-        lastCompleted.getMonth() === yesterday.getMonth() &&
-        lastCompleted.getDate() === yesterday.getDate()
+        lastCompleted.getFullYear() == yesterday.getFullYear() &&
+        lastCompleted.getMonth() == yesterday.getMonth() &&
+        lastCompleted.getDate() == yesterday.getDate()
       ) {
         // Increase streak by 1
         const currentStreak = thisHabit['currentStreak'] + 1;
@@ -150,11 +150,12 @@ const HabitDetails = ({route}) => {
     }
   };
   const decreaseCount = () => {
+    // Make sure current count is not 0.
     if (currentCount !== 0) {
       // Create a copy of habits
       let habitsCopy = [...route.params.habits];
       // Find this habit obj. within the new copy of habits
-      let thisHabit = habitsCopy.find(obj => obj.id === route.params.id);
+      let thisHabit = habitsCopy.find(obj => obj.id == route.params.id);
 
       setCurrentCount(currentCount - 1);
       route.params.setThisCurrentCount(currentCount - 1);
@@ -164,53 +165,31 @@ const HabitDetails = ({route}) => {
         route.params.last7dCompletedData.length - 1
       ] = x;
 
-      // Update streak and last completed date
-      let currentStreak = thisHabit.currentStreak;
+      /* 
+      If we are at the goal for today check if streak is greater than 1. If it is,
+      that means we can revert last completed day to yesterday. 
+      If streak is not larger than 1, then we need to set last completed date to null
+      and set streak to 0 because it was not completed yesterday.
+     */
       let lastCompletedDate = thisHabit.lastCompletedDate;
+      let today = getTodaysDate();
+      if (currentCount == goalCount) {
+        if (thisCurrentStreak > 1) {
+          // If completed today already, re-write date to yesterday.
+          if (compareDates(lastCompletedDate, today)) {
+            thisHabit['lastCompletedDate'] = getYesterdaysDate();
+            let x = thisHabit['currentStreak'] - 1;
 
-      if (currentCount === goalCount) {
-        currentStreak -= 1;
-        thisHabit.currentStreak = currentStreak;
-
-        const today = new Date();
-        const yesterday = new Date(today);
-        yesterday.setDate(today.getDate() - 1);
-
-        // Check if today is the first day of the month
-        if (today.getDate() === 1) {
-          // Set the date to the last day of the previous month
-          yesterday.setMonth(yesterday.getMonth() - 1);
-          yesterday.setDate(
-            new Date(
-              yesterday.getFullYear(),
-              yesterday.getMonth() + 1,
-              0,
-            ).getDate(),
-          );
+            thisHabit['currentStreak'] = x;
+            route.params.setThisCurrentStreak(x);
+            setCurrentStreak(x);
+          }
+        } else if (thisCurrentStreak <= 1) {
+          thisHabit['currentStreak'] = 0;
+          route.params.setThisCurrentStreak(0);
+          setCurrentStreak(0);
         }
-
-        // Check if today is the first day of the year
-        if (today.getMonth() === 0 && today.getDate() === 1) {
-          // Set the date to the last day of the previous year
-          yesterday.setFullYear(yesterday.getFullYear() - 1);
-          yesterday.setMonth(11); // December
-          yesterday.setDate(31);
-        }
-
-        const formattedDate =
-          yesterday.getMonth() +
-          1 +
-          '-' +
-          yesterday.getDate() +
-          '-' +
-          yesterday.getFullYear();
-
-        lastCompletedDate = formattedDate;
       }
-
-      route.params.setThisCurrentStreak(currentStreak);
-      setCurrentStreak(currentStreak);
-      thisHabit.lastCompletedDate = lastCompletedDate;
 
       route.params.setHabits(habitsCopy);
       saveHabit();
@@ -236,12 +215,30 @@ const HabitDetails = ({route}) => {
     return month + '-' + date + '-' + year;
   };
 
+  //*Date Functions
+  // Get today's date and split it into an array.
+  const getTodaysDate = () => {
+    let today = new Date();
+    today.setDate(today.getDate());
+    today = today.toDateString().split(' ');
+    return today;
+  };
+  // Get tomorrow's date and split it into an array.
+  const getYesterdaysDate = () => {
+    let yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    yesterday = yesterday.toDateString().split(' ');
+    return yesterday;
+  };
+  // Function used to compare two dates.
+  const compareDates = (a, b) => {
+    return JSON.stringify(a) === JSON.stringify(b);
+  };
+
   const deleteThisHabit = () => {
     let habitsCopy = route.params.habits;
     //find this habit obj. within the new copy of habits
-    let thisHabitIndex = habitsCopy.findIndex(
-      obj => obj.id === route.params.id,
-    );
+    let thisHabitIndex = habitsCopy.findIndex(obj => obj.id == route.params.id);
     let newHabits = habitsCopy.splice(thisHabitIndex, 1);
     console.log(thisHabitIndex, '------');
 
@@ -353,8 +350,6 @@ const HabitDetails = ({route}) => {
   );
 };
 
-export default HabitDetails;
-
 const styles = StyleSheet.create({
   divider: {
     height: StyleSheet.hairlineWidth,
@@ -430,3 +425,4 @@ const styles = StyleSheet.create({
     color: 'red',
   },
 });
+export default HabitDetails;

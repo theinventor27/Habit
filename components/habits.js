@@ -64,6 +64,7 @@ const habits = ({
     }
   };
   const habitCompleted = () => {
+    console.log('habit completed function ran');
     //create copy of habits
     let habitsCopy = habits;
     //find this habit obj. within the new copy of habits
@@ -82,64 +83,80 @@ const habits = ({
       }
 
       //set date to check if completed in a streak.
-      const today = new Date();
-      thisHabit['lastCompletedDate'] = today.toDateString();
+      const today = getTodaysDate();
+      thisHabit['lastCompletedDate'] = today;
 
       //set copy as official habit
       setHabits(habitsCopy);
       saveHabit();
     }
+
+    //If this habit's current streak is larger than 0 then
+    //we need to check if the habit was completed in a streak.
+    //If not, set current streak to 0.
     if (thisHabit['currentStreak'] > 0) {
       //create copy of habits
       let habitsCopy = habits;
       //find this habit obj. within the new copy of habits
-      let thisHabit = habitsCopy.find(obj => obj.id === id);
+      let thisHabit = habitsCopy.find(obj => obj.id == id);
 
-      //Get last completed date and todays date and split them into an array to compare
-      //each elements of the array. All elements should be the same except for the day.
-      //The day should be 1 more than the last completed day.
+      // Get last completed date, today's date, and yesterdays date.
       let lastCompletedDate = thisHabit['lastCompletedDate'];
-      const today = new Date();
-      const yesterday = new Date(today);
-      //Get yesterday's date.
-      yesterday.setDate(yesterday.getDate() - 1);
-
-      //check if lastCompletedDate was yesterday, if so, add 1 to streak
-      if (lastCompletedDate == yesterday.toDateString()) {
-        //increase streak by 1.
+      let today = getTodaysDate();
+      let yesterday = getYesterdaysDate();
+      // If habit was last completed yesterday...
+      if (compareDates(lastCompletedDate, yesterday)) {
+        // Get current streak plus 1.
         let x = thisHabit['currentStreak'] + 1;
+        // Add 1 to streak.
+        setThisCurrentStreak(x);
         thisHabit['currentStreak'] = x;
-        //check if currentStreak is longer than longestStreak
+        //Now, check if we broke our longest streak record
         if (x > longestStreak) {
+          //if so, set to value of x.
           setThisLongestStreak(x);
           thisHabit['longestStreak'] = x;
         }
-        setThisCurrentStreak(x);
-        //set date to check later if completed in a streak.
-        thisHabit['lastCompletedDate'] = today.toDateString();
-        //set copy as official habit
-        setHabits(habitsCopy);
-        saveHabit();
-        //Else, habit was not completed yesterday
-      } else {
+        //Now set our new last completed date.
+        thisHabit['lastCompletedDate'] = getTodaysDate();
+        console.log(
+          'Last completed date has been overwritten. New date:',
+          getTodaysDate(),
+        );
+        //Else habit not completed in streak. Set to 1.
+      } 
+      else {
         setThisCurrentStreak(1);
+        console.log(
+          'habit was not completed in a streak. Current streak set to 1.',
+        );
       }
-    } else {
-      setThisCurrentStreak(1);
+
+      //set copy as official habit
+      setHabits(habitsCopy);
+      saveHabit();
     }
   };
 
-  //returns current date formatted d-m-yyyy
-  // const getCurrentDate = () => {
-  //   var date = new Date().getDate();
-  //   var month = new Date().getMonth() + 1;
-  //   var year = new Date().getFullYear();
-
-  //   // console.log(month + '-' + date + '-' + year);
-  //   // You can turn it in to your desired format
-  //   return month + '-' + date + '-' + year; //format: d-m-y;
-  // };
-
+  //*Date Functions
+  // Get today's date and split it into an array.
+  const getTodaysDate = () => {
+    let today = new Date();
+    today.setDate(today.getDate());
+    today = today.toDateString().split(' ');
+    return today;
+  };
+  // Get tomorrow's date and split it into an array.
+  const getYesterdaysDate = () => {
+    let yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    yesterday = yesterday.toDateString().split(' ');
+    return yesterday;
+  };
+  // Function used to compare two dates.
+  const compareDates = (a, b) => {
+    return JSON.stringify(a) === JSON.stringify(b);
+  };
   //Navigate to habit detail page
   const onPressHabitName = () => {
     navigation.navigate('HabitDetails', {
