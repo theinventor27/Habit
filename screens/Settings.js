@@ -188,6 +188,7 @@ const Settings = ({route, navigation}) => {
     <SafeAreaView style={[styles.screen, {backgroundColor: bgTheme}]}>
       <View style={styles.screen}>
         <ListHeader />
+
         <View style={styles.circularProgressExample}>
           <CircularProgress
             value={randomValue}
@@ -200,7 +201,6 @@ const Settings = ({route, navigation}) => {
           />
         </View>
         <FlatListWithColors />
-
         <View style={styles.darkModeWrapper}>
           <Text style={[styles.darkModeText, {color: textTheme}]}>
             Dark Mode:
@@ -214,7 +214,6 @@ const Settings = ({route, navigation}) => {
             value={isEnabled}
           />
         </View>
-
         <TouchableOpacity onPress={() => deleteAllHabits()}>
           <Text style={[styles.deleteAllHabits]}>DELETE ALL HABITS</Text>
         </TouchableOpacity>
@@ -246,7 +245,9 @@ const styles = StyleSheet.create({
   darkModeWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginLeft: 10,
+    marginLeft: 15,
+    marginTop: 15,
+    marginBottom: 350,
   },
 
   darkModeText: {

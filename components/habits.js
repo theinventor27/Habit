@@ -124,8 +124,7 @@ const habits = ({
           getTodaysDate(),
         );
         //Else habit not completed in streak. Set to 1.
-      } 
-      else {
+      } else {
         setThisCurrentStreak(1);
         console.log(
           'habit was not completed in a streak. Current streak set to 1.',

@@ -13,7 +13,7 @@ import LineChart7d from '../components/HabitDetails/LineChart7d';
 import HabitStats from '../components/HabitDetails/HabitStats';
 import {useNavigation} from '@react-navigation/native';
 import EditHabitBottomSheet from '../components/HabitDetails/EditHabitBottomSheet';
-
+import ContributionGraphComponent from '../components/HabitDetails/ContributionGraphComponent';
 const HabitDetails = ({route}) => {
   const [currentCount, setCurrentCount] = useState(
     route.params.thisCurrentCount,
@@ -21,7 +21,7 @@ const HabitDetails = ({route}) => {
   const [thisCurrentStreak, setCurrentStreak] = useState(
     route.params.currentStreak,
   );
-  const [thisCurrentLongestStreak, setThisCurrentLongestStreak] = useState(
+  const [thisLongestStreak, setThisLongestStreak] = useState(
     route.params.longestStreak,
   );
 
@@ -65,88 +65,78 @@ const HabitDetails = ({route}) => {
     }
   };
   const habitCompleted = () => {
+    console.log('habit completed function ran');
     //create copy of habits
-    let habitsCopy = route.params.habits;
-    //find this habit obj. within the new copy of habits
+    let habitsCopy = [...route.params.habits];
+    // Find this habit obj. within the new copy of habits
     let thisHabit = habitsCopy.find(obj => obj.id == route.params.id);
 
     //If currentStreak is 0 then we do not check if it was completed yesterday.
     if (thisHabit['currentStreak'] == 0) {
       //Set streaks to 1.
       thisHabit['currentStreak'] = 1;
-      route.params.setThisCurrentStreak(1);
       setCurrentStreak(1);
       //check if longestStreak is 0 if so, set to 1.
-      if (route.params.longestStreak == 0) {
+      if (thisLongestStreak == 0) {
         thisHabit['longestStreak'] = 1;
-        route.params.setThisLongestStreak(1);
-        setThisCurrentLongestStreak(1);
+        setThisLongestStreak(1);
+        5;
       }
 
-      //set date to check if completed in a streak
-      thisHabit['lastCompletedDate'] = getTodaysDate();
+      //set date to check if completed in a streak.
+      const today = getTodaysDate();
+      thisHabit['lastCompletedDate'] = today;
+
       //set copy as official habit
       route.params.setHabits(habitsCopy);
       saveHabit();
     }
+
+    //If this habit's current streak is larger than 0 then
+    //we need to check if the habit was completed in a streak.
+    //If not, set current streak to 0.
     if (thisHabit['currentStreak'] > 0) {
       //create copy of habits
-      let habitsCopy = route.params.habits;
-      //find this habit obj. within the new copy of habits
+      let habitsCopy = [...route.params.habits];
+      // Find this habit obj. within the new copy of habits
       let thisHabit = habitsCopy.find(obj => obj.id == route.params.id);
 
-      //Get last completed date and todays date and split them into an array to compare
-      //each elements of the array. All elements should be the same except for the day.
-      //The day should be 1 more than the last completed day.
-      const lastCompletedDate = thisHabit['lastCompletedDate'];
-      const todaysDate = getCurrentDate();
-
-      const lastCompletedDateParts = lastCompletedDate.split('-');
-      const todaysDateParts = todaysDate.split('-');
-
-      const lastCompletedMonth = parseInt(lastCompletedDateParts[0], 10);
-      const lastCompletedDay = parseInt(lastCompletedDateParts[1], 10);
-      const lastCompletedYear = parseInt(lastCompletedDateParts[2], 10);
-
-      const todaysMonth = parseInt(todaysDateParts[0], 10);
-      const todaysDay = parseInt(todaysDateParts[1], 10);
-      const todaysYear = parseInt(todaysDateParts[2], 10);
-
-      const lastCompleted = new Date(
-        lastCompletedYear,
-        lastCompletedMonth - 1,
-        lastCompletedDay,
-      );
-      const yesterday = new Date(todaysYear, todaysMonth - 1, todaysDay - 1);
-
-      if (
-        lastCompleted.getFullYear() == yesterday.getFullYear() &&
-        lastCompleted.getMonth() == yesterday.getMonth() &&
-        lastCompleted.getDate() == yesterday.getDate()
-      ) {
-        // Increase streak by 1
-        const currentStreak = thisHabit['currentStreak'] + 1;
-        thisHabit['currentStreak'] = currentStreak;
-
-        // Check if currentStreak is longer than longestStreak
-        if (currentStreak > route.params.longestStreak) {
-          route.params.setThisLongestStreak(currentStreak);
-          setThisCurrentLongestStreak(currentStreak);
-          thisHabit['longestStreak'] = currentStreak;
+      // Get last completed date, today's date, and yesterdays date.
+      let lastCompletedDate = thisHabit['lastCompletedDate'];
+      let today = getTodaysDate();
+      let yesterday = getYesterdaysDate();
+      // If habit was last completed yesterday...
+      if (compareDates(lastCompletedDate, yesterday)) {
+        // Get current streak plus 1.
+        let x = thisHabit['currentStreak'] + 1;
+        // Add 1 to streak.
+        setCurrentStreak(x);
+        thisHabit['currentStreak'] = x;
+        //Now, check if we broke our longest streak record
+        if (x > route.params.longestStreak) {
+          //if so, set to value of x.
+          setThisLongestStreak(x);
+          thisHabit['longestStreak'] = x;
         }
-
-        route.params.setThisCurrentStreak(currentStreak);
-        setCurrentStreak(currentStreak);
-
-        // Set today's date as the last completed date
-        thisHabit['lastCompletedDate'] = todaysDate;
-
-        route.params.setHabits(habitsCopy);
-        saveHabit();
+        //Now set our new last completed date.
+        thisHabit['lastCompletedDate'] = getTodaysDate();
+        console.log(
+          'Last completed date has been overwritten. New date:',
+          getTodaysDate(),
+        );
+        //Else habit not completed in streak. Set to 1.
       } else {
-        route.params.setThisCurrentStreak(1);
         setCurrentStreak(1);
+        thisHabit['currentStreak'] = 1;
+
+        console.log(
+          'habit was not completed in a streak. Current streak set to 1.',
+        );
       }
+
+      //set copy as official habit
+      route.params.setHabits(habitsCopy);
+      saveHabit();
     }
   };
   const decreaseCount = () => {
@@ -305,20 +295,15 @@ const HabitDetails = ({route}) => {
         goalCount={route.params.goalCount}
         last7dCompletedData={route.params.last7dCompletedData}
         currentStreak={thisCurrentStreak}
-        longestStreak={thisCurrentLongestStreak}
+        longestStreak={thisLongestStreak}
         //theme
         bgtheme={route.params.bgTheme}
         textTheme={route.params.textTheme}
       />
       <View style={styles.componenetDivider} />
 
-      <LineChart7d
-        theme={route.params.habitTheme}
-        last7dCompletedData={route.params.last7dCompletedData}
-        //theme
-        bgtheme={route.params.bgTheme}
-        textTheme={route.params.textTheme}
-      />
+      <ContributionGraphComponent habitTheme="#3A86FF" />
+      <ContributionGraphComponent habitTheme="#3A86FF" />
 
       <View style={styles.push} />
       <View style={styles.deleteWrapper}>

@@ -19,6 +19,7 @@ const LineChart7d = ({theme, last7dCompletedData, textTheme, bgTheme}) => {
     last7Days = last7Days.reverse();
     setLast7Days(last7Days);
   };
+
   useEffect(() => {
     returnLast7Days();
   }, []);
@@ -37,7 +38,7 @@ const LineChart7d = ({theme, last7dCompletedData, textTheme, bgTheme}) => {
         width={Dimensions.get('window').width} // from react-native
         height={300}
         yAxisLabel=""
-        yAxisInterval={1} // optional, defaults to 1
+        yAxisInterval={0.1} // optional, defaults to 1
         chartConfig={{
           strokeWidth: 1.5,
           backgroundColor: '#0000ffff',
@@ -46,7 +47,9 @@ const LineChart7d = ({theme, last7dCompletedData, textTheme, bgTheme}) => {
           backgroundGradientFrom: '#0000ffff',
           backgroundGradientTo: '#0000ffff',
 
-          decimalPlaces: 2, // optional, defaults to 2dp
+          decimalPlaces: 0, // optional, defaults to 2dp
+          fromZero: true,
+
           propsForBackgroundLines: {
             strokeWidth: 0,
           },
