@@ -13,7 +13,8 @@ import LineChart7d from '../components/HabitDetails/LineChart7d';
 import HabitStats from '../components/HabitDetails/HabitStats';
 import {useNavigation} from '@react-navigation/native';
 import EditHabitBottomSheet from '../components/HabitDetails/EditHabitBottomSheet';
-import ContributionGraphComponent from '../components/HabitDetails/ContributionGraphComponent';
+import GraphCarousel from '../components/HabitDetails/GraphCarousel';
+
 const HabitDetails = ({route}) => {
   const [currentCount, setCurrentCount] = useState(
     route.params.thisCurrentCount,
@@ -76,6 +77,8 @@ const HabitDetails = ({route}) => {
       //Set streaks to 1.
       thisHabit['currentStreak'] = 1;
       setCurrentStreak(1);
+      route.params.setThisCurrentStreak(1);
+
       //check if longestStreak is 0 if so, set to 1.
       if (thisLongestStreak == 0) {
         thisHabit['longestStreak'] = 1;
@@ -112,6 +115,8 @@ const HabitDetails = ({route}) => {
         // Add 1 to streak.
         setCurrentStreak(x);
         thisHabit['currentStreak'] = x;
+        route.params.setThisCurrentStreak(x);
+
         //Now, check if we broke our longest streak record
         if (x > route.params.longestStreak) {
           //if so, set to value of x.
@@ -128,6 +133,7 @@ const HabitDetails = ({route}) => {
       } else {
         setCurrentStreak(1);
         thisHabit['currentStreak'] = 1;
+        route.params.setThisCurrentStreak(1);
 
         console.log(
           'habit was not completed in a streak. Current streak set to 1.',
@@ -302,8 +308,10 @@ const HabitDetails = ({route}) => {
       />
       <View style={styles.componenetDivider} />
 
-      <ContributionGraphComponent habitTheme="#3A86FF" />
-      <ContributionGraphComponent habitTheme="#3A86FF" />
+      <GraphCarousel
+        last7dCompletedData={route.params.last7dCompletedData}
+        textTheme={route.params.textTheme}
+      />
 
       <View style={styles.push} />
       <View style={styles.deleteWrapper}>

@@ -22,6 +22,7 @@ const LineChart7d = ({theme, last7dCompletedData, textTheme, bgTheme}) => {
 
   useEffect(() => {
     returnLast7Days();
+    console.log('text', textTheme);
   }, []);
 
   return (

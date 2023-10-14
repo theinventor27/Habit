@@ -5,6 +5,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import Home from './screens/Home';
 import HabitDetails from './screens/HabitDetails';
 import Settings from './screens/Settings';
+import 'react-native-gesture-handler';
 
 const Stack = createStackNavigator();
 

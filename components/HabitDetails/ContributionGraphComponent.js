@@ -18,50 +18,21 @@ const ContributionGraphComponent = ({habitTheme}) => {
 
   // Fake Data for graph
   const commitsData = [
-    {date: '2022-07-01', count: 1},
-    {date: '2022-07-02', count: 1},
-    {date: '2022-07-03', count: 2},
-    {date: '2022-07-04', count: 0},
-    {date: '2022-07-05', count: 4},
-    {date: '2022-07-06', count: 0},
-    {date: '2022-07-07', count: 1},
-    {date: '2022-07-08', count: 0},
-    {date: '2022-07-09', count: 3},
-    {date: '2022-07-10', count: 2},
-    {date: '2022-07-11', count: 0},
-    {date: '2022-07-12', count: 0},
-    {date: '2022-07-13', count: 0},
-    {date: '2022-07-14', count: 1},
-    {date: '2022-07-15', count: 5},
-    {date: '2022-07-16', count: 0},
-    {date: '2022-07-17', count: 0},
-    {date: '2022-07-18', count: 2},
-    {date: '2022-07-19', count: 1},
-    {date: '2022-07-20', count: 0},
-    {date: '2022-07-21', count: 0},
-    {date: '2022-07-22', count: 3},
-    {date: '2022-07-23', count: 1},
-    {date: '2022-07-24', count: 2},
-    {date: '2022-07-25', count: 0},
-    {date: '2022-07-26', count: 0},
-    {date: '2022-07-27', count: 0},
-    {date: '2022-07-28', count: 4},
-    {date: '2022-07-29', count: 0},
-    {date: '2022-07-30', count: 0},
+    {date: '2023-07-01', count: 7},
+    {date: '2023-01-01', count: 1},
+    {date: '2023-02-01', count: 5},
+    {date: '2023-08-06', count: 2},
+    {date: '2023-05-01', count: 3},
+    {date: '2023-03-01', count: 7},
+    {date: '2023-04-01', count: 5},
   ];
-
-  // Modify the data by adding the color property for each data point
-  const modifiedData = commitsData.map(item => ({
-    ...item,
-    color: getColorForCount(item.count),
-  }));
 
   return (
     <View style={styles.container}>
       <ContributionGraph
-        values={modifiedData}
-        endDate={new Date('2022-07-30')}
-        numDays={180}
+        values={commitsData}
+        endDate={new Date('2023-06-30')}
+        numDays={181}
         width={windowWidth}
         height={150}
         chartConfig={{
@@ -70,13 +41,25 @@ const ContributionGraphComponent = ({habitTheme}) => {
           backgroundGradientToOpacity: 0,
           color: (opacity = 1) => `rgba(225, 225, 225, ${opacity})`,
           labelColor: (opacity = 1) => `rgba(225,225,225, ${opacity})`,
-          // The following extra prop allows us to customize individual square colors
-          extra: {
-            squareColor: ({count}) => getColorForCount(count),
-          },
         }}
         style={{marginVertical: 10}}
-        squareSize={12}
+        squareSize={11.5}
+      />
+      <ContributionGraph
+        values={commitsData}
+        endDate={new Date('2023-12-31')}
+        numDays={184}
+        width={windowWidth}
+        height={150}
+        chartConfig={{
+          backgroundGradientFrom: '#e26a00',
+          backgroundGradientFromOpacity: 0,
+          backgroundGradientToOpacity: 0,
+          color: (opacity = 1) => `rgba(225, 225, 225, ${opacity})`,
+          labelColor: (opacity = 1) => `rgba(225,225,225, ${opacity})`,
+        }}
+        style={{marginVertical: 10}}
+        squareSize={11.5}
       />
     </View>
   );
@@ -85,6 +68,7 @@ const ContributionGraphComponent = ({habitTheme}) => {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: 'transparent',
+    marginRight: 10,
   },
 });
 
