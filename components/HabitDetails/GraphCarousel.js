@@ -9,6 +9,7 @@ const GraphCarousel = ({
   bgTheme,
   textTheme,
   habitTheme,
+  contributionGraphData,
 }) => {
   const [carouselIndex, setCarouselIndex] = useState(1);
 
@@ -38,7 +39,10 @@ const GraphCarousel = ({
         renderItem={({index}) => (
           <View style={styles.carouselItem}>
             {index % 2 === 0 ? (
-              <ContributionGraphComponent />
+              <ContributionGraphComponent
+                contributionGraphData={contributionGraphData}
+                habitTheme={habitTheme}
+              />
             ) : (
               <LineChart7d
                 last7dCompletedData={last7dCompletedData}

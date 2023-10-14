@@ -30,6 +30,18 @@ const HabitDetails = ({route}) => {
   const [isEditing, setIsEditing] = useState(false);
   const [name, setName] = useState(route.params.name);
   const navigation = useNavigation();
+  const [_contributionGraphData, setContributionGraphData] = useState(
+    route.params.contributionGraphData,
+  );
+  const getDateforContributionGraph = () => {
+    const currentDate = new Date();
+    const year = currentDate.getFullYear();
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed, so we add 1 and pad with '0'.
+    const day = String(currentDate.getDate()).padStart(2, '0');
+
+    const formattedDate = `${year}-${month}-${day}`;
+    return formattedDate;
+  };
 
   const saveHabit = async () => {
     try {
@@ -57,6 +69,16 @@ const HabitDetails = ({route}) => {
       thisHabit['last7dCompletedData'][
         route.params.last7dCompletedData.length - 1
       ] = x;
+
+      //set contribution graph data
+      const dateForContributionGraph = getDateforContributionGraph();
+
+      const dateForContributionGraphPlaceholder = [
+        ...thisHabit['contributionGraphData'],
+        {date: dateForContributionGraph, count: x},
+      ];
+      thisHabit['contributionGraphData'] = dateForContributionGraphPlaceholder;
+      setContributionGraphData(dateForContributionGraphPlaceholder);
       route.params.setHabits(habitsCopy);
       saveHabit();
     }
@@ -310,6 +332,7 @@ const HabitDetails = ({route}) => {
 
       <GraphCarousel
         last7dCompletedData={route.params.last7dCompletedData}
+        contributionGraphData={route.params.contributionGraphData}
         textTheme={route.params.textTheme}
       />
 

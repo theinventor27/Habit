@@ -23,6 +23,7 @@ const habits = ({
   currentStreak,
   longestStreak,
   last7dCompletedData,
+  contributionGraphData,
   habitTheme,
   textTheme,
   bgTheme,
@@ -31,11 +32,25 @@ const habits = ({
   const [thisCurrentCount, setThisCurrentCount] = useState(currentCount);
   const [thisCurrentStreak, setThisCurrentStreak] = useState(currentStreak);
   const [thisLongestStreak, setThisLongestStreak] = useState(longestStreak);
+
+  const [_contributionGraphData, setContributionGraphData] = useState(
+    contributionGraphData,
+  );
+
   const getThisHabit = () => {
     let habitsCopy = habits;
     //find this habit obj. within the new copy of habits
     let thisHabit = habitsCopy.find(obj => obj.id === id);
     return thisHabit;
+  };
+  const getDateforContributionGraph = () => {
+    const currentDate = new Date();
+    const year = currentDate.getFullYear();
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed, so we add 1 and pad with '0'.
+    const day = String(currentDate.getDate()).padStart(2, '0');
+
+    const formattedDate = `${year}-${month}-${day}`;
+    return formattedDate;
   };
   //Increases the count of the habit if count has not reached countGoal.
   //Check if habit has been completed.
@@ -53,6 +68,16 @@ const habits = ({
       thisHabit['currentCount'] = x;
       //set todays current count in 7dCompletedData
       thisHabit['last7dCompletedData'][last7dCompletedData.length - 1] = x;
+      //set contribution graph data
+      const dateForContributionGraph = getDateforContributionGraph();
+
+      const dateForContributionGraphPlaceholder = [
+        ...thisHabit['contributionGraphData'],
+        {date: dateForContributionGraph, count: x},
+      ];
+
+      thisHabit['contributionGraphData'] = dateForContributionGraphPlaceholder;
+      setContributionGraphData(dateForContributionGraphPlaceholder);
       //set copy as official habit
       console.log(habitsCopy);
       setHabits(habitsCopy);
@@ -173,6 +198,7 @@ const habits = ({
       longestStreak: thisLongestStreak,
       setThisLongestStreak: setThisLongestStreak,
       setThisCurrentStreak: setThisCurrentStreak,
+      contributionGraphData: contributionGraphData,
 
       //theme
       bgTheme: bgTheme,

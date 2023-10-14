@@ -52,6 +52,7 @@ const BottomSheet = ({
         longestStreak: 0,
         lastCompletedDate: null,
         last7dCompletedData: [0, 0, 0, 0, 0, 0, 0],
+        contributionGraphData: [],
       },
     ];
     setHabits(newHabitItems);

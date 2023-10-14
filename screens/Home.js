@@ -143,8 +143,6 @@ const App = () => {
     console.log('isFocused status', isFocused);
   };
 
-  
-
   useEffect(() => {
     getHabit();
     checkTime();

@@ -58,6 +58,7 @@ const HabitList = ({
             longestStreak={item.longestStreak}
             lastCompletedDate={item.lastCompletedDate}
             last7dCompletedData={item.last7dCompletedData}
+            contributionGraphData={item.contributionGraphData}
             //theme
             habitTheme={habitTheme}
             textTheme={textTheme}

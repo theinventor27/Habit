@@ -3,7 +3,7 @@ import React from 'react';
 import {ContributionGraph} from 'react-native-chart-kit';
 import {Dimensions} from 'react-native';
 
-const ContributionGraphComponent = ({habitTheme}) => {
+const ContributionGraphComponent = ({habitTheme, contributionGraphData}) => {
   // Get width of screen
   const windowWidth = Dimensions.get('window').width;
   const getColorForCount = count => {
@@ -30,7 +30,7 @@ const ContributionGraphComponent = ({habitTheme}) => {
   return (
     <View style={styles.container}>
       <ContributionGraph
-        values={commitsData}
+        values={contributionGraphData}
         endDate={new Date('2023-06-30')}
         numDays={181}
         width={windowWidth}
@@ -46,7 +46,7 @@ const ContributionGraphComponent = ({habitTheme}) => {
         squareSize={11.5}
       />
       <ContributionGraph
-        values={commitsData}
+        values={contributionGraphData}
         endDate={new Date('2023-12-31')}
         numDays={184}
         width={windowWidth}
