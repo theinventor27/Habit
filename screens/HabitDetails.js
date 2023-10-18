@@ -79,6 +79,7 @@ const HabitDetails = ({route}) => {
       ];
       thisHabit['contributionGraphData'] = dateForContributionGraphPlaceholder;
       setContributionGraphData(dateForContributionGraphPlaceholder);
+      route.params.contributionGraphData = dateForContributionGraphPlaceholder;
       route.params.setHabits(habitsCopy);
       saveHabit();
     }
@@ -182,6 +183,17 @@ const HabitDetails = ({route}) => {
       thisHabit.last7dCompletedData[
         route.params.last7dCompletedData.length - 1
       ] = x;
+
+      //set contribution graph data
+      const dateForContributionGraph = getDateforContributionGraph();
+
+      const dateForContributionGraphPlaceholder = [
+        ...thisHabit['contributionGraphData'],
+        {date: dateForContributionGraph, count: x},
+      ];
+      thisHabit['contributionGraphData'] = dateForContributionGraphPlaceholder;
+      route.params.contributionGraphData = dateForContributionGraphPlaceholder;
+      setContributionGraphData(dateForContributionGraphPlaceholder);
 
       /* 
       If we are at the goal for today check if streak is greater than 1. If it is,
