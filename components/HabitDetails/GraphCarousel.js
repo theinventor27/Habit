@@ -47,6 +47,7 @@ const GraphCarousel = ({
               <LineChart7d
                 last7dCompletedData={last7dCompletedData}
                 textTheme={textTheme}
+                habitTheme={habitTheme}
               />
             )}
           </View>

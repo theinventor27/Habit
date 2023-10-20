@@ -1,86 +1,79 @@
-import {StyleSheet, Text, View, Dimensions} from 'react-native';
 import React, {useState, useEffect} from 'react';
-import {LineChart} from 'react-native-chart-kit';
+import {Text, View, StyleSheet} from 'react-native';
+import {LineChart, YAxis} from 'react-native-svg-charts';
 
-const LineChart7d = ({theme, last7dCompletedData, textTheme, bgTheme}) => {
+const LineChart7d = ({habitTheme, last7dCompletedData, textTheme}) => {
   const [last7Days, setLast7Days] = useState([]);
 
-  const returnLast7Days = () => {
-    const daysOfTheWeek = ['Sun', 'Mon', 'Tues', 'Wed', 'Thu', 'Fri', 'Sat'];
-    let last7Days = [];
-    var dayOfWeekDigit = new Date().getDay();
-    last7Days.push(daysOfTheWeek[dayOfWeekDigit]);
-    for (dayOfWeekDigit !== 0; dayOfWeekDigit--; ) {
-      last7Days.push(daysOfTheWeek[dayOfWeekDigit]);
-    }
-    for (let x = 6; last7Days.length != 7; x--) {
-      last7Days.push(daysOfTheWeek[x]);
-    }
-    last7Days = last7Days.reverse();
-    setLast7Days(last7Days);
-  };
-
   useEffect(() => {
-    returnLast7Days();
-    console.log('text', textTheme);
+    const daysOfTheWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const currentDate = new Date();
+
+    // Calculate the last 7 days, starting from today
+    const last7Days = [];
+    for (let i = 6; i >= 0; i--) {
+      const date = new Date(currentDate);
+      date.setDate(currentDate.getDate() - i);
+      const dayOfWeek = date.getDay();
+      last7Days.push(daysOfTheWeek[dayOfWeek]);
+    }
+
+    setLast7Days(last7Days);
   }, []);
 
   return (
-    <View style={styles.chartWrapper}>
-      <LineChart
-        data={{
-          labels: last7Days,
-          datasets: [
-            {
-              data: last7dCompletedData,
-            },
-          ],
-        }}
-        width={Dimensions.get('window').width} // from react-native
-        height={300}
-        yAxisLabel=""
-        yAxisInterval={0.1} // optional, defaults to 1
-        chartConfig={{
-          strokeWidth: 1.5,
-          backgroundColor: '#0000ffff',
-          backgroundGradientToOpacity: 0,
-          backgroundGradientFromOpacity: 0,
-          backgroundGradientFrom: '#0000ffff',
-          backgroundGradientTo: '#0000ffff',
-
-          decimalPlaces: 0, // optional, defaults to 2dp
-          fromZero: true,
-
-          propsForBackgroundLines: {
-            strokeWidth: 0,
-          },
-          color: (opacity = 0.3) => textTheme,
-          labelColor: (opacity = 0.2) => textTheme,
-          style: {
-            borderRadius: 16,
-          },
-          propsForDots: {
-            r: '3',
-            strokeWidth: '2',
-            stroke: theme,
-          },
-        }}
-        bezier
-      />
+    <View style={styles.container}>
+      <View style={styles.chartWrapper}>
+        <YAxis
+          data={last7dCompletedData}
+          contentInset={{top: 20, bottom: 20}}
+          svg={{
+            fill: textTheme,
+            fontSize: 12,
+          }}
+          numberOfTicks={1}
+          formatLabel={value => `${value}`}
+        />
+        <LineChart
+          style={{flex: 1, marginLeft: 16}}
+          data={last7dCompletedData}
+          svg={{stroke: habitTheme}}
+          contentInset={{top: 20, bottom: 20}}
+        />
+      </View>
+      <View style={styles.xAxis}>
+        {last7Days.map((day, index) => (
+          <Text key={index} style={styles.xAxisLabel}>
+            {day}
+          </Text>
+        ))}
+      </View>
     </View>
   );
 };
 
-export default LineChart7d;
-
 const styles = StyleSheet.create({
-  chartWrapper: {
-    marginTop: 40,
+  container: {
+    flexDirection: 'column',
+    alignItems: 'center', // Center the chart and X-axis labels horizontally
+    height: 300,
+    width: 300,
   },
-  chartTitle: {
+  chartWrapper: {
+    flexDirection: 'row',
+    height: 280,
+    alignItems: 'center', // Center the Y-axis and chart horizontally
+  },
+  xAxis: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center', // Center the X-axis labels horizontally
+  },
+  xAxisLabel: {
+    color: 'white',
+    flex: 1,
     textAlign: 'center',
-    fontSize: 15,
-    marginTop: 5,
-    marginBottom: 10,
   },
 });
+
+export default LineChart7d;

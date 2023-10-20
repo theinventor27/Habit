@@ -346,6 +346,7 @@ const HabitDetails = ({route}) => {
         last7dCompletedData={route.params.last7dCompletedData}
         contributionGraphData={route.params.contributionGraphData}
         textTheme={route.params.textTheme}
+        habitTheme={route.params.habitTheme}
       />
 
       <View style={styles.push} />
